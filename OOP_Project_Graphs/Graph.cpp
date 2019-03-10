@@ -1,3 +1,4 @@
+#define STARS "******************************\n"
 #include "Graph.h"
 
 template <class T>
@@ -99,6 +100,7 @@ void Graph<T>::print_graph_incident_list() {
 	typename std::vector<T>::iterator neighbour;
 	typename std::map< T, std::vector<T> >::iterator node;
 
+	std::cout << '\n' << STARS << "Incident list of graph:\n";
 	for (node = graph.begin(); node != graph.end(); ++node) {
 		std::cout << node->first << ": ";
 
@@ -107,6 +109,7 @@ void Graph<T>::print_graph_incident_list() {
 		
 		std::cout << std::endl;
 	}
+	std::cout << STARS << '\n';
 }
 
 template <class T>
@@ -116,22 +119,23 @@ void Graph<T>::print_connected_nodes_matrix() {
 	typename std::map<T, bool>::iterator row;
 	typename std::map<T, bool>::iterator col;
 
-	std::cout << '\t';
+	std::cout << STARS << "Connected nodes matrix:\n\t";
 	for (row = visited_nodes.begin(); row != visited_nodes.end(); ++row)
 		std::cout << row->first << '\t';
 	std::cout << std::endl;
 
 	for (row = visited_nodes.begin(); row != visited_nodes.end(); ++row) {
-		std::cout << row->first << '\t';
+		std::cout << row->first << ":\t";
 		for (col = visited_nodes.begin(); col != visited_nodes.end(); ++col) 
 			std::cout << connected_nodes[std::pair<T, T>(row->first, col->first)] << '\t';
 		std::cout << std::endl;
 	}
+	std::cout << STARS << std::endl;
 }
 
 template <class T>
 void Graph<T>::print_strongly_connected_components() {
-	std::cout << "******************************\n";
+	std::cout << STARS;
 	std::cout << "List of strongly connex components:\n";
 	init_strongly_conn_comp();
 	typename std::vector<T>::iterator node;
@@ -145,7 +149,9 @@ void Graph<T>::print_strongly_connected_components() {
 		}
 		std::cout << "}" << std::endl;
 	}
-	std::cout << "******************************\n" << is_graph_strongly_connected();
+	std::cout << "The graph is ";
+	if (strongly_connected_components.size() != 1) std::cout << "not ";
+	std::cout << "strongly connex\n" << STARS << std::endl;
 }
 
 // Graph iterations:

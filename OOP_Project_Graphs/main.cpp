@@ -7,6 +7,7 @@ std::istream& operator >> (std::istream& is, Graph<T> & tmp) {
 	std::cout << "Number of edges: ";
 	T edges; is >> edges;
 
+	std::cout << "Input edges:\n";
 	std::pair<T, T> edge;
 	for (int i = 0; i < edges; i++) {
 		is >> edge.first >> edge.second;
@@ -17,10 +18,8 @@ std::istream& operator >> (std::istream& is, Graph<T> & tmp) {
 
 template <class T>
 std::ostream& operator << (std::ostream& os, Graph<T> & tmp) {
-	os << "\n******************************\n";
-	os << "Incident list of graph:\n";
 	tmp.print_graph_incident_list();
-	return os << "******************************\n\n";}
+	return os;}
 
 template <class T>
 Graph<T> operator + (Graph<T> first_term, Graph<T>& second_term) {
@@ -42,19 +41,49 @@ Graph<T> operator + (Graph<T> first_term, Graph<T>& second_term) {
 	return first_term;}
 
 int main() {
-	Graph<int> * a = new Graph<int>;
-	std::cin >> *a;
-	Graph<int> * b = new Graph<int>;
-	std::cin >> *b;
-	Graph<int> * c = new Graph<int>;
-	*c = *a + *b;
+	
+	// main menu
+	//////////////////////////////////////////////////
+	// Current graphs:								//
+	// {nume1, nume2, nume3}						//
+	//												//
+	// 1) Add new Graph 							//
+	//												//
+	// 2) Show/Edit graph data						//
+	//												//
+	// 3) Delete graph 								//
+	//												//
+	// 4) Reset										//
+	//  > 											//
+	//////////////////////////////////////////////////
 
-	std::cout << *a << std::endl;
-	std::cout << *b << std::endl;
-	std::cout << *c << std::endl;
+	
+	// add new graph menu
+	//////////////////////////////////////////////////
+	// Graph name: Network							//
+	// Graph data type: string						//
+	// Number of edges: 4							//
+	// Input edges:									//
+	// x y											//
+	// z y										 	//
+	// t b 										  	//
+	// s o 										  	//
+	// Graph created! Press any key to go back... 	//
+ 	//////////////////////////////////////////////////	
 
-	delete a;
-	delete b;
-	delete c;
+
+	// show/edit graph data menu
+	//////////////////////////////////////////////////
+	// Graph: nume2									//
+	//												//
+	// 1) Print graph 								//
+	// 2) Print connected nodes matrix              //
+	// 3) Print strongly connected components		//
+	// 4) DFS										//
+	// 5) BFS										//
+	// 5) Add new edge 								//
+	// 6) Go back 									//
+	//  > 											//
+	//////////////////////////////////////////////////
 }
 
