@@ -1,4 +1,5 @@
 #include <iostream>
+#include <typeinfo>
 #include <vector>
 #include <queue>
 #include <stack>
@@ -20,6 +21,7 @@ Graph<T> operator + (Graph<T>, Graph<T>&);
 template <class T>
 class Graph {
 
+	std::string name;
 	std::map< T, bool > visited_nodes;
 	std::map< T, std::vector<T> > graph;
 	std::map< std::pair<T, T>, bool> connected_nodes;
@@ -35,16 +37,19 @@ class Graph {
 	
 public:
 	
-	Graph() {}
+	Graph() {};
+	Graph(std::string name) : name(name) {};
 	Graph(const std::map< T, std::vector<T> >&);
 	
+	friend Graph<T> operator + <>(Graph<T>, Graph<T>&);
 	friend std::istream& operator >> <>(std::istream&, Graph<T>&);
 	friend std::ostream& operator << <>(std::ostream&, Graph<T>&);
-	friend Graph<T> operator + <>(Graph<T>, Graph<T>&);
 
 	void DFS(T);
 	void BFS(T);
 
+	std::string get_name();
+	std::string get_type();
 	void print_visited_nodes();
 	void print_graph_incident_list();
 	void print_connected_nodes_matrix();

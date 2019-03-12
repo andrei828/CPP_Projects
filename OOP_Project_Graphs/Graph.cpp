@@ -19,6 +19,12 @@ void Graph<T>::add_edge(const std::pair<T, T>& edge) {
 }
 
 template <class T>
+std::string Graph<T>::get_name() { return name; }
+
+template <class T>
+std::string Graph<T>::get_type() { return typeid(T).name(); }
+
+template <class T>
 void Graph<T>::clear_visited_nodes() {
 	typename std::map < T, bool >::iterator node;
 	for (node = visited_nodes.begin(); node != visited_nodes.end(); ++node)
@@ -52,6 +58,7 @@ void Graph<T>::init_strongly_conn_comp() {
 	std::stack<T> Stack;
 	std::vector< std::vector<T> > result;
 	std::map< T, std::vector<T> > reversed_graph;
+	strongly_connected_components.clear();
 	
 	clear_visited_nodes();
 
@@ -89,10 +96,16 @@ bool Graph<T>::is_graph_strongly_connected() {
 
 template <class T>
 void Graph<T>::print_visited_nodes() {
-	typename std::map<T, bool>::iterator node;
-	for (node = visited_nodes.begin(); node != visited_nodes.end(); ++node)
-		std::cout << "(" << node->first << ", " << node->second << "), ";
-	std::cout << std::endl;	
+	if (!visited_nodes.empty()) {
+		std::cout << "\n{ ";
+		typename std::map<T, bool>::iterator node = visited_nodes.begin();
+		std::cout << node->first; ++node; 
+		for (; node != visited_nodes.end(); ++node) {
+			std::cout << ", " << node->first;
+		}
+		std::cout << "}"<< std::endl;	
+	} else 
+		std::cout << "{ }";
 }
 
 template <class T>
@@ -159,8 +172,9 @@ void Graph<T>::print_strongly_connected_components() {
 template <class T>
 void Graph<T>::DFS(T node) {
 	std::stack<T> graph_stack;
-
+	std::cout << STARS << "DFS: ";
 	clear_visited_nodes();
+	visited_nodes[node] = true;
 	graph_stack.push(node);
 
 	while(!graph_stack.empty()) {
@@ -177,7 +191,7 @@ void Graph<T>::DFS(T node) {
 			if (!visited_nodes[*neighbour]) 
 				graph_stack.push(*neighbour);
 	}
-	std::cout << std::endl;
+	std::cout << std::endl << STARS << std::endl;
 }
 
 template <class T>
@@ -206,7 +220,7 @@ std::vector<T> Graph<T>::DFS(T node, std::map< T, std::vector<T> > & graph) {
 template <class T>
 void Graph<T>::BFS(T node) {
 	std::queue<T> graph_queue;
-
+	std::cout << STARS << "BFS: ";
 	clear_visited_nodes();
 	graph_queue.push(node);
 	visited_nodes[node] = true;
@@ -216,7 +230,7 @@ void Graph<T>::BFS(T node) {
 		T first_elem = graph_queue.front();
 		graph_queue.pop();
 
-		// print first_elem variable here
+		std::cout << first_elem << ' ';
 
 		typename std::vector<T>::iterator neighbour;
 		for (neighbour = graph[first_elem].begin(); neighbour != graph[first_elem].end(); ++neighbour) { 
@@ -226,6 +240,7 @@ void Graph<T>::BFS(T node) {
 			}
 		}
 	}
+	std::cout << std::endl << STARS << std::endl;
 }
 
 template <class T>
@@ -250,8 +265,6 @@ void Graph<T>::DFS_fill_stack(const T & node, std::stack<T> & Stack) {
 			DFS_fill_stack(*neighbour, Stack);
 	Stack.push(node);
 }
-
-
 
 template class Graph<int>;
 template class Graph<char>;

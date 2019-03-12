@@ -1,11 +1,10 @@
-#include <iostream>
-#include "Graph.h"
+#include "menu_impl.h"
 
 template <class T>
 std::istream& operator >> (std::istream& is, Graph<T> & tmp) {
 	
 	std::cout << "Number of edges: ";
-	T edges; is >> edges;
+	int edges; is >> edges;
 
 	std::cout << "Input edges:\n";
 	std::pair<T, T> edge;
@@ -14,12 +13,14 @@ std::istream& operator >> (std::istream& is, Graph<T> & tmp) {
 		tmp.add_edge(edge);
 	}
 
-	return is;}
+	return is;
+}
 
 template <class T>
 std::ostream& operator << (std::ostream& os, Graph<T> & tmp) {
 	tmp.print_graph_incident_list();
-	return os;}
+	return os;
+}
 
 template <class T>
 Graph<T> operator + (Graph<T> first_term, Graph<T>& second_term) {
@@ -38,14 +39,16 @@ Graph<T> operator + (Graph<T> first_term, Graph<T>& second_term) {
 			first_term.graph.insert(*node);
 		}
 	}
-	return first_term;}
+	return first_term;
+}
 
 int main() {
-	
+	print_main_menu();
+
 	// main menu
 	//////////////////////////////////////////////////
 	// Current graphs:								//
-	// {nume1, nume2, nume3}						//
+	// { nume1, nume2, nume3 }	 					//
 	//												//
 	// 1) Add new Graph 							//
 	//												//
@@ -53,7 +56,9 @@ int main() {
 	//												//
 	// 3) Delete graph 								//
 	//												//
-	// 4) Reset										//
+	// 4) Add two graphs							//
+	//												//
+	// 5) Reset										//
 	//  > 											//
 	//////////////////////////////////////////////////
 
@@ -81,9 +86,11 @@ int main() {
 	// 3) Print strongly connected components		//
 	// 4) DFS										//
 	// 5) BFS										//
-	// 5) Add new edge 								//
-	// 6) Go back 									//
+	// 6) Add new edge 								//
+	// 7) Go back 									//
 	//  > 											//
 	//////////////////////////////////////////////////
 }
+
+
 
