@@ -9,8 +9,10 @@ void testing();
 void print_main_menu();
 void reset_everything();
 void print_add_graph_menu();
+void print_add_two_graphs();
 void choose_graph_for_info();
 void choose_graph_for_deletion();
+bool is_string_type(std::string tmp);
 template <class T> void print_graph_data(Graph<T> * tmp);
 void print_graph_name_from_list(std::vector<std::pair< void *, std::string > >::iterator & graph);
 
@@ -45,7 +47,7 @@ void print_main_menu() {
 	else if (option == 3)
 		choose_graph_for_deletion();
 	else if (option == 4)
-		reset_everything();
+		print_add_two_graphs();
 	else if (option == 5) 
 		reset_everything();
 			
@@ -120,7 +122,6 @@ void choose_graph_for_info() {
 
 	if (it != graph_name.end()) {
 		int index = distance(graph_name.begin(), it);
-		std::cout << "INDEX = " << index << std::endl;
 
 		if (!graph_list[index].second.compare("i")){
 			print_graph_data((Graph<int> *)graph_list[index].first);
@@ -160,7 +161,7 @@ void choose_graph_for_deletion() {
 	if (it != graph_name.end()) {
 		int index = distance(graph_name.begin(), it);
 		std::cout << "INDEX = " << index << std::endl;
-		delete graph_list[index].first;
+		//delete graph_list[index].first;
 		graph_list.erase(graph_list.begin() + index);
 		graph_name.erase(graph_name.begin() + index);
 	} else goto RETRY_DELETE;
@@ -221,10 +222,119 @@ void print_graph_data(Graph<T> * tmp) {
 	} 
 }
 
+void print_add_two_graphs() {
+	if (!graph_list.empty()) {
+		RETRY_ADD_TWO:
+		CLEAR;
+		std::string type;
+		std::string g_name;
+		std::string choice1;
+		std::string choice2;
+
+		std::cout << "\nNew graph name: ";
+		std::cin >> g_name;
+
+		std::cout << "\nGraph data type: ";
+		std::cin >> type;
+
+		std::cout << std::endl << "\n {";
+		
+		if (is_string_type(type)) {
+			if (is_string_type(graph_name[0])) std::cout << graph_name[0];
+			for (size_t index = 1; index < graph_name.size(); ++index)
+				if (is_string_type(graph_list[index].second)) 
+					std::cout << ", " << graph_name[index];
+		}
+		else {
+			if (!is_string_type(graph_name[0])) std::cout << graph_name[0];
+			for (size_t index = 1; index < graph_name.size(); ++index)
+				if (!is_string_type(graph_list[index].second) && 
+					graph_list[index].second[0] == type[0]) 
+					std::cout << ", " << graph_name[index];
+		}
+	
+		std::cout << "}\n\n" << "Choose first graph for adition: ";
+		std::cin >> choice1;
+
+		std::cout << "Choose second graph for adition: ";
+		std::cin >> choice2;
+
+		std::vector<std::string>::iterator it1 = std::find(graph_name.begin(), graph_name.end(), choice1);
+		std::vector<std::string>::iterator it2 = std::find(graph_name.begin(), graph_name.end(), choice2);
+		if (it1 != graph_name.end() && it2 != graph_name.end()) {
+			int index1 = distance(graph_name.begin(), it1);
+			int index2 = distance(graph_name.begin(), it2);
+
+			if (!graph_list[index1].second.compare(graph_list[index2].second)) {
+				if (!graph_list[index1].second.compare("i")) {
+					Graph<int> * first_graph = (Graph<int> *) graph_list[index1].first;
+					Graph<int> * second_graph = (Graph<int> *) graph_list[index2].first;
+					
+					Graph<int> * result = new Graph<int>(g_name); 
+					graph_name.push_back(g_name);
+					*result = *first_graph + *second_graph;
+					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+				} else if (!graph_list[index1].second.compare("c")) {
+					Graph<char> * first_graph = (Graph<char> *) graph_list[index1].first;
+					Graph<char> * second_graph = (Graph<char> *) graph_list[index2].first;
+
+					Graph<char> * result = new Graph<char>(g_name); 
+					graph_name.push_back(g_name);
+					*result = *first_graph + *second_graph;
+					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+				} else if (!graph_list[index1].second.compare("s")) {
+					Graph<short> * first_graph = (Graph<short> *) graph_list[index1].first;
+					Graph<short> * second_graph = (Graph<short> *) graph_list[index2].first;
+
+					Graph<short> * result = new Graph<short>(g_name); 
+					graph_name.push_back(g_name);
+					*result = *first_graph + *second_graph;
+					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+				} else if (!graph_list[index1].second.compare("f")) {
+					Graph<float> * first_graph = (Graph<float> *) graph_list[index1].first;
+					Graph<float> * second_graph = (Graph<float> *) graph_list[index2].first;
+
+					Graph<float> * result = new Graph<float>(g_name); 
+					graph_name.push_back(g_name);
+					*result = *first_graph + *second_graph;
+					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+				} else if (!graph_list[index1].second.compare("d")) {
+					Graph<double> * first_graph = (Graph<double> *) graph_list[index1].first;
+					Graph<double> * second_graph = (Graph<double> *) graph_list[index2].first;
+
+					Graph<double> * result = new Graph<double>(g_name); 
+					graph_name.push_back(g_name);
+					*result = *first_graph + *second_graph;
+					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+				} else {
+					Graph<std::string> * first_graph = (Graph<std::string> *) graph_list[index1].first;
+					Graph<std::string> * second_graph = (Graph<std::string> *) graph_list[index2].first;
+
+					Graph<std::string> * result = new Graph<std::string>(g_name); 
+					graph_name.push_back(g_name);
+					*result = *first_graph + *second_graph;
+					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+				}
+			}
+		} else goto RETRY_ADD_TWO;
+	}
+}
+
+bool is_string_type(std::string tmp) {
+	if (tmp[0] == 'i' || tmp[0] == 's' || tmp[0] == 'f' || tmp[0] == 'd' || tmp[0] == 'c')
+		return false;
+	return true;
+}
+
 void reset_everything() {
 	std::vector< std::pair< void *, std::string > >::iterator it;
-	for (it = graph_list.begin(); it != graph_list.end(); ++it) 
-		delete it->first;
+	//for (it = graph_list.begin(); it != graph_list.end(); ++it) 
+	//	delete it->first;
 	graph_list.clear();
 	graph_name.clear();
 }
