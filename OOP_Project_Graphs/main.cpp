@@ -47,48 +47,48 @@ int main() {
 
 	// main menu
 	//////////////////////////////////////////////////
-	// Current graphs:								//
-	// { nume1, nume2, nume3 }	 					//
-	//												//
-	// 1) Add new Graph 							//
-	//												//
-	// 2) Show/Edit graph data						//
-	//												//
-	// 3) Delete graph 								//
-	//												//
-	// 4) Add two graphs							//
-	//												//
-	// 5) Reset										//
-	//  > 											//
+	// Current graphs:								
+	// { nume1, nume2, nume3 }						
+	//												
+	// 1) Add new Graph 							
+	//												
+	// 2) Show/Edit graph data						
+	//												
+	// 3) Delete graph 							
+	//												
+	// 4) Add two graphs							
+	//												
+	// 5) Reset										
+	//  > 											
 	//////////////////////////////////////////////////
 
 	
 	// add new graph menu
 	//////////////////////////////////////////////////
-	// Graph name: Network							//
-	// Graph data type: string						//
-	// Number of edges: 4							//
-	// Input edges:									//
-	// x y											//
-	// z y										 	//
-	// t b 										  	//
-	// s o 										  	//
-	// Graph created! Press any key to go back... 	//
+	// Graph name: Network							
+	// Graph data type: string						
+	// Number of edges: 4							
+	// Input edges:									
+	// x y											
+	// z y										 	
+	// t b 										  	
+	// s o 										  	
+	// Graph created! Press any key to go back... 	
  	//////////////////////////////////////////////////	
 
 
 	// show/edit graph data menu
 	//////////////////////////////////////////////////
-	// Graph: nume2									//
-	//												//
-	// 1) Print graph 								//
-	// 2) Print connected nodes matrix              //
-	// 3) Print strongly connected components		//
-	// 4) DFS										//
-	// 5) BFS										//
-	// 6) Add new edge 								//
-	// 7) Go back 									//
-	//  > 											//
+	// Graph: nume2									
+	//												
+	// 1) Print graph 								
+	// 2) Print connected nodes matrix              
+	// 3) Print strongly connected components		
+	// 4) DFS										
+	// 5) BFS										
+	// 6) Add new edge 								
+	// 7) Go back 									
+	//  > 											
 	//////////////////////////////////////////////////
 }
 
