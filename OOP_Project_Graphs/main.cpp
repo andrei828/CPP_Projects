@@ -44,6 +44,7 @@ Graph<T> operator + (Graph<T> first_term, Graph<T>& second_term) {
 
 int main() {
 	print_main_menu();
+}
 
 	// main menu
 	//////////////////////////////////////////////////
@@ -90,7 +91,5 @@ int main() {
 	// 7) Go back 									
 	//  > 											
 	//////////////////////////////////////////////////
-}
-
 
 
