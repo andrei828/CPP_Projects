@@ -240,13 +240,13 @@ void print_add_two_graphs() {
 		std::cout << std::endl << "\n {";
 		
 		if (is_string_type(type)) {
-			if (is_string_type(graph_name[0])) std::cout << graph_name[0];
+			if (is_string_type(graph_list[0].second)) std::cout << graph_name[0];
 			for (size_t index = 1; index < graph_name.size(); ++index)
 				if (is_string_type(graph_list[index].second)) 
 					std::cout << ", " << graph_name[index];
 		}
 		else {
-			if (!is_string_type(graph_name[0])) std::cout << graph_name[0];
+			if (!is_string_type(graph_list[0].second)) std::cout << graph_name[0];
 			for (size_t index = 1; index < graph_name.size(); ++index)
 				if (!is_string_type(graph_list[index].second) && 
 					graph_list[index].second[0] == type[0]) 
@@ -271,54 +271,72 @@ void print_add_two_graphs() {
 					Graph<int> * second_graph = (Graph<int> *) graph_list[index2].first;
 					
 					Graph<int> * result = new Graph<int>(g_name); 
-					graph_name.push_back(g_name);
 					*result = *first_graph + *second_graph;
-					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+					if (result->get_name().compare("error")) {
+						graph_name.push_back(g_name);
+						graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					}
 
 				} else if (!graph_list[index1].second.compare("c")) {
 					Graph<char> * first_graph = (Graph<char> *) graph_list[index1].first;
 					Graph<char> * second_graph = (Graph<char> *) graph_list[index2].first;
 
 					Graph<char> * result = new Graph<char>(g_name); 
-					graph_name.push_back(g_name);
 					*result = *first_graph + *second_graph;
-					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+					if (result->get_name().compare("error")) {
+						graph_name.push_back(g_name);
+						graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					}
 
 				} else if (!graph_list[index1].second.compare("s")) {
 					Graph<short> * first_graph = (Graph<short> *) graph_list[index1].first;
 					Graph<short> * second_graph = (Graph<short> *) graph_list[index2].first;
 
 					Graph<short> * result = new Graph<short>(g_name); 
-					graph_name.push_back(g_name);
 					*result = *first_graph + *second_graph;
-					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+					if (result->get_name().compare("error")) {
+						graph_name.push_back(g_name);
+						graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					}
 
 				} else if (!graph_list[index1].second.compare("f")) {
 					Graph<float> * first_graph = (Graph<float> *) graph_list[index1].first;
 					Graph<float> * second_graph = (Graph<float> *) graph_list[index2].first;
 
 					Graph<float> * result = new Graph<float>(g_name); 
-					graph_name.push_back(g_name);
 					*result = *first_graph + *second_graph;
-					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+
+					if (result->get_name().compare("error")) {
+						graph_name.push_back(g_name);
+						graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					}
 
 				} else if (!graph_list[index1].second.compare("d")) {
 					Graph<double> * first_graph = (Graph<double> *) graph_list[index1].first;
 					Graph<double> * second_graph = (Graph<double> *) graph_list[index2].first;
 
 					Graph<double> * result = new Graph<double>(g_name); 
-					graph_name.push_back(g_name);
 					*result = *first_graph + *second_graph;
-					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					
+					if (result->get_name().compare("error")) {
+						graph_name.push_back(g_name);
+						graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					}
 
 				} else {
 					Graph<std::string> * first_graph = (Graph<std::string> *) graph_list[index1].first;
 					Graph<std::string> * second_graph = (Graph<std::string> *) graph_list[index2].first;
 
 					Graph<std::string> * result = new Graph<std::string>(g_name); 
-					graph_name.push_back(g_name);
 					*result = *first_graph + *second_graph;
-					graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					
+					if (result->get_name().compare("error")) {
+						graph_name.push_back(g_name);
+						graph_list.push_back(std::pair< void *, std::string >(result, result->get_type()));
+					}
 				}
 			}
 		} else goto RETRY_ADD_TWO;

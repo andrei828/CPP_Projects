@@ -3,7 +3,17 @@
 template <class T>
 std::istream& operator >> (std::istream& is, Graph<T> & tmp) {
 	
-	std::cout << "Number of edges: ";
+	std::cout << "Number of nodes: ";
+	int nodes; is >> nodes;
+
+	std::cout << "Input nodes:\n";
+	T node;
+	for (int i = 0; i < nodes; i++) {
+		is >> node;
+		tmp.add_node(node);
+	}
+
+	std::cout << "\nNumber of edges: ";
 	int edges; is >> edges;
 
 	std::cout << "Input edges:\n";
@@ -24,6 +34,23 @@ std::ostream& operator << (std::ostream& os, Graph<T> & tmp) {
 
 template <class T>
 Graph<T> operator + (Graph<T> first_term, Graph<T>& second_term) {
+
+	Graph<T> _err("error");
+	if (first_term.visited_nodes.size() != second_term.visited_nodes.size()) {
+		return _err;
+	}
+
+	typename std::map<T, bool>::iterator _node1;
+	typename std::map<T, bool>::iterator _node2;
+
+	for (_node1 = first_term.visited_nodes.begin(), _node2 = second_term.visited_nodes.begin();
+		_node1 != first_term.visited_nodes.end(); ++_node1, ++_node2) {
+		if (first_term.visited_nodes.find(_node2->first) == first_term.visited_nodes.end()) 
+			return _err;
+		if (second_term.visited_nodes.find(_node1->first) == second_term.visited_nodes.end())
+			return _err;
+	}
+
 	typename std::vector<T>::iterator neigh;
 	typename std::map< T, std::vector<T> >::iterator node;
 	for (node = second_term.graph.begin(); node != second_term.graph.end(); ++node) {

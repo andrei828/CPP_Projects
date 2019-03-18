@@ -9,13 +9,21 @@ Graph<T>::Graph(const std::map< T, std::vector<T> >& graph) {
 // Graph services
 
 template <class T>
+void Graph<T>::add_node(const T& node) {
+	graph[node] = std::vector<T>();
+	visited_nodes.insert(std::pair<T, bool>(node, false));
+}
+
+template <class T>
 void Graph<T>::add_edge(const std::pair<T, T>& edge) {
-	connected_nodes[edge] = true;
-	graph[edge.first].push_back(edge.second);
-	visited_nodes.insert(std::pair<T, bool>(edge.first, 0));
-	visited_nodes.insert(std::pair<T, bool>(edge.second, 0));
-	connected_nodes[std::pair<T,T>(edge.first, edge.first)] = true;
-	connected_nodes[std::pair<T,T>(edge.second, edge.second)] = true;
+	if (visited_nodes.find(edge.first)  != visited_nodes.end() && 
+		visited_nodes.find(edge.second) != visited_nodes.end()) {
+		
+		connected_nodes[edge] = true;
+		graph[edge.first].push_back(edge.second);
+		connected_nodes[std::pair<T,T>(edge.first, edge.first)] = true;
+		connected_nodes[std::pair<T,T>(edge.second, edge.second)] = true;
+	}
 }
 
 template <class T>
@@ -173,8 +181,8 @@ template <class T>
 void Graph<T>::DFS(T node) {
 	std::stack<T> graph_stack;
 	std::cout << STARS << "DFS: ";
+	
 	clear_visited_nodes();
-	visited_nodes[node] = true;
 	graph_stack.push(node);
 
 	while(!graph_stack.empty()) {

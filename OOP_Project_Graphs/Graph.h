@@ -55,6 +55,7 @@ public:
 	void print_connected_nodes_matrix();
 	void print_strongly_connected_components();
 	
+	void add_node(const T&);
 	void add_edge(const std::pair<T, T>&);
 };
 
