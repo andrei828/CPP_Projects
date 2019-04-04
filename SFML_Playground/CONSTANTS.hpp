@@ -1,0 +1,3 @@
+#define SCREEN_WIDTH 1500
+#define SCREEN_HEIGHT 1700
+#define SCREEN_TITLE "SFML Playground"
