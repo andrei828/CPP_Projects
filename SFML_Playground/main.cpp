@@ -9,7 +9,7 @@ int main() {
     // textures
     sf::Texture X, _backgound_texture;
     X.setSmooth(true);
-    if (!X.loadFromFile("x.png") || !_backgound_texture.loadFromFile("background.png")) return -1;
+    if (!X.loadFromFile("x.png") || !_backgound_texture.loadFromFile("Bkgrnd.png")) return -1;
     
     // vars
     sf::Vector2i mousePosition = sf::Vector2i(50, 50);
