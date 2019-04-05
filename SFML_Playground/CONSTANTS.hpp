@@ -6,3 +6,9 @@
 #define WHITE_STONE "White_Stone.png"
 #define STONE_WIDTH 50
 #define STONE_HEIGHT 50
+
+#define GAME_WIDTH 23
+#define GAME_HEIGHT 20
+
+#define SWAP_1 0
+#define SWAP_2 1

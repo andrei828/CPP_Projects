@@ -1,6 +1,4 @@
-#include <iostream>
-#include "CONSTANTS.hpp"
-#include <SFML/Graphics.hpp>
+#include "Game.hpp"
 
 void place_piece(sf::RenderWindow & window, sf::Vector2f position, sf::Texture & texture) {
     sf::Sprite sprite;
@@ -24,6 +22,19 @@ int main() {
     sf::Vector2i mousePosition = sf::Vector2i(50, 50);
     sf::Vector2i place_piece_position = sf::Vector2i(-1, -1);
 
+    //testing board placing
+    Game * game = new Game();
+    game->display_board();
+    game->place_stone(sf::Vector2i(3, 4));
+    game->display_board();
+    game->place_stone(sf::Vector2i(3, 5));
+    game->place_stone(sf::Vector2i(3, 6));
+    game->place_stone(sf::Vector2i(3, 7));
+    game->place_stone(sf::Vector2i(3, 8));
+    game->display_board();
+    // end
+    
+    
     
     while (window.isOpen()) {
         sf::Event event;
