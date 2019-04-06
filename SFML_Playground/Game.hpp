@@ -15,8 +15,9 @@ public:
     
     void start();
     void pass() { Turn = !Turn; }
+    bool get_turn() { return Turn; }
     void place_stone(const sf::Vector2i & position);
-    char get_stone(int x, int y) { return Board[x][y]; }
+    char get_stone(int x, int y) { return Board[y][x]; }
     //debugging
     void display_board();
 };

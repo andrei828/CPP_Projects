@@ -10,17 +10,17 @@ void Game::start() {
 }
 
 void Game::place_stone(const sf::Vector2i & position) {
-    if (!Board[position.x][position.y]) {
-        Board[position.x][position.y] = (Turn == true)? 1 : 2;
+    if (!Board[position.y][position.x]) {
+        Board[position.y][position.x] = (Turn == true)? 1 : 2;
         Turn = !Turn;
     }
 }
 
 // DEBUGGING
 void Game::display_board() {
-    for (int i = 0; i < GAME_HEIGHT; i++) {
-        for (int j = 0; j < GAME_WIDTH; j++)
-            std::cout << (int) Board[i][j] << ' ';
+    for (int y = 0; y < GAME_HEIGHT_SEG; y++) {
+        for (int x = 0; x < GAME_WIDTH_SEG; x++)
+            std::cout << (int) Board[y][x] << ' ';
         std::cout << std::endl;
     }
     std::cout << std::endl << std::endl;
@@ -31,15 +31,15 @@ Game::Game(bool Turn) {
     this->Turn = Turn;
     
     // memory allocation for board matrix
-    Board = new char * [GAME_HEIGHT];
-    if (Board) for (int i = 0; i < GAME_HEIGHT; i++) {
-        Board[i] = new char[GAME_WIDTH];
-        if (Board[i]) std::fill(Board[i], Board[i] + GAME_WIDTH, 0);
+    Board = new char * [GAME_HEIGHT_SEG];
+    if (Board) for (int y = 0; y < GAME_HEIGHT_SEG; y++) {
+        Board[y] = new char[GAME_WIDTH_SEG];
+        if (Board[y]) std::fill(Board[y], Board[y] + GAME_WIDTH_SEG, 0);
     }
 }
 
 Game::~Game() {
     // freeing memory from board matrix
-    for (int i = 0; i < GAME_WIDTH; i++) delete[] Board[i];
+    for (int y = 0; y < GAME_HEIGHT_SEG; y++) delete[] Board[y];
     delete[] Board;
 }
