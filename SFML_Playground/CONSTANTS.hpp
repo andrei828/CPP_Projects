@@ -1,6 +1,6 @@
 #define SCREEN_WIDTH 1500
 #define SCREEN_HEIGHT 1700
-#define SCREEN_TITLE "SFML Playground"
+#define SCREEN_TITLE "Gomoku"
 
 #define BLACK_STONE "Black_Stone.png"
 #define WHITE_STONE "White_Stone.png"
@@ -12,3 +12,9 @@
 
 #define SWAP_1 0
 #define SWAP_2 1
+
+#define GAME_TITLE "Gomoku"
+
+#define EMPTY 0
+#define BLACK 1
+#define WHITE 2
