@@ -27,3 +27,11 @@
 
 #define PLAYER_1 "Player 1"
 #define PLAYER_2 "Player 2"
+
+// Game Text
+#define SWAP1_BUTTON "Swap mode"
+#define SWAP2_BUTTON "Swap 2 mode"
+#define PASS_BUTTON "Pass"
+#define RESTART_BUTTON "Restart"
+#define PLAYER_1_TURN "It's player 1's turn"
+#define PLAYER_2_TURN "It's player 2's turn"

@@ -1,65 +1,33 @@
 #include "Game.hpp"
 #include <cmath>
 
+void init_text();
+void init_fonts();
+void init_sprites();
+void init_textures();
+
+sf::Font font;
+sf::Sprite background, whiteStone, blackStone, mouseStone;
+sf::Texture BlackStoneTexture, WhiteStoneTexture, BackgroundTexture;
+sf::Text Player_1, Player_2, playerTurn, passButton, restartButton, swap1Button, swap2Button;
+
+void set_game_type_gui(bool GameType);
+
 sf::Vector2f get_gui_position(sf::Vector2i position);
 sf::Vector2i get_board_position(sf::Vector2i mousePos);
 void place_piece(sf::RenderWindow & window, sf::Vector2f position, sf::Texture & texture);
-
-void init_fonts(sf::Font & font);
-void init_text(sf::Text & Player_1, sf::Text & Player_2, sf::Font & font);
-void init_textures(sf::Texture & BlackStoneTexture, sf::Texture & WhiteStoneTexture, sf::Texture & BackgroundTexture);
 
 int main() {
     // window render
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
     
-    // fonts
-    sf::Font font;
-    init_fonts(font);
+    // intitialise data
+    init_fonts(); init_text(); init_textures(); init_sprites();
     
-    // text
-    sf::Text Player_1, Player_2;
-    init_text(Player_1, Player_2, font);
-    
-    // textures
-    sf::Texture BlackStoneTexture, WhiteStoneTexture, _backgound_texture;
-    init_textures(BlackStoneTexture, WhiteStoneTexture, _backgound_texture);
-    
-    // sprites
-    sf::Sprite background;
-    background.setTexture(_backgound_texture);
-    background.setPosition(0, 200);
-    
-    
-    // Dummy text block remember to delete
-    sf::Text text;
-    text.setFont(font);
-    text.setString(GAME_TITLE);
-    text.setCharacterSize(50);
-    text.setFillColor(sf::Color::Red);
-    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-    float text_width = text.getLocalBounds().width;
-    float text_height = text.getLocalBounds().height;
-    text.setPosition((SCREEN_WIDTH - text_width) / 2, 50);
-    // end of dummy text block
-    
+    sf::Vector2i mousePosition = sf::Vector2i(-50, -50);
 
-    
-    sf::Vector2i mousePosition = sf::Vector2i(50, 50);
-
-    //testing board placing
-    
     Game * game = new Game();
-    game->display_board();
-    game->place_stone(sf::Vector2i(3, 4));
-    game->display_board();
-    game->place_stone(sf::Vector2i(3, 5));
-    game->place_stone(sf::Vector2i(3, 6));
-    game->place_stone(sf::Vector2i(3, 7));
-    game->place_stone(sf::Vector2i(3, 8));
-    game->display_board();
     
-    // end
     sf::Vector2i mousePos;
     sf::Vector2f mousePosF;
     sf::Vector2i tmp;
@@ -68,17 +36,27 @@ int main() {
         
         // handle events here
         while (window.pollEvent(event)) {
+            
+            mousePos = sf::Mouse::getPosition(window);
+            mousePosF = sf::Vector2f( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+            
             switch (event.type) {
                 case sf::Event::Closed:
                     window.close();
                     break;
                 
                 case sf::Event::MouseButtonPressed:
-                    mousePos = sf::Mouse::getPosition(window);
-                    mousePosF = sf::Vector2f( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-                    if (text.getGlobalBounds().contains(mousePosF))
+                    // mouse clicked turn label
+                    if (playerTurn.getGlobalBounds().contains(mousePosF))
                         std::cout << "Clicked button\n" << std::endl;
                     
+                    // mouse clicked pass label
+                    if (passButton.getGlobalBounds().contains(mousePosF))
+                        game->pass();
+                    
+                    if (restartButton.getGlobalBounds().contains(mousePosF))
+                        std::cout << "Restart button pressed\n";
+                
                     // stone placed on board
                     if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y) {
                         tmp = get_board_position(mousePos);
@@ -90,23 +68,19 @@ int main() {
                 case sf::Event::MouseMoved:
                     mousePosition = sf::Mouse::getPosition(window);
                     break;
+                default: break;
             }
         }
         
         // update game here
-        
+        set_game_type_gui(game->get_game_type());
+        playerTurn.setString(((game->get_turn())? PLAYER_2_TURN : PLAYER_1_TURN));
+        mouseStone.setTexture((game->get_turn())? WhiteStoneTexture : BlackStoneTexture);
+        mouseStone.setPosition(mousePosition.x - STONE_WIDTH / 2, mousePosition.y - STONE_HEIGHT / 2);
         window.clear(sf::Color::White);
         
         // draw objects here
-        
-        sf::Sprite sprite;
-        sprite.setTexture((game->get_turn())? WhiteStoneTexture : BlackStoneTexture);
-        sprite.setPosition(mousePosition.x - STONE_WIDTH / 2, mousePosition.y - STONE_HEIGHT / 2);
-        
         window.draw(background);
-        
-        window.draw(text);
-        window.draw(line);
         
         for (int y = 0; y < GAME_HEIGHT_SEG; y++)
             for (int x = 0; x < GAME_WIDTH_SEG; x++) {
@@ -114,10 +88,28 @@ int main() {
                 if (piece) place_piece(window, get_gui_position(sf::Vector2i(x, y)), (piece & 1)? WhiteStoneTexture : BlackStoneTexture);
             }
 
-        window.draw(sprite);
+        
         window.draw(Player_1);
         window.draw(Player_2);
+        window.draw(mouseStone);
+        window.draw(whiteStone);
+        window.draw(blackStone);
+        window.draw(passButton);
+        window.draw(playerTurn);
+        window.draw(swap1Button);
+        window.draw(swap2Button);
+        window.draw(restartButton);
         window.display();
+    }
+}
+
+void set_game_type_gui(bool GameType) {
+    if (GameType) {
+        swap1Button.setStyle(sf::Text::Regular);
+        swap2Button.setStyle(sf::Text::Underlined);
+    } else {
+        swap2Button.setStyle(sf::Text::Regular);
+        swap1Button.setStyle(sf::Text::Underlined);
     }
 }
 
@@ -138,7 +130,7 @@ void place_piece(sf::RenderWindow & window, sf::Vector2f position, sf::Texture &
     window.draw(sprite);
 }
 
-void init_textures(sf::Texture & BlackStoneTexture, sf::Texture & WhiteStoneTexture, sf::Texture & BackgroundTexture) {
+void init_textures() {
     if (!BlackStoneTexture.loadFromFile(BLACK_STONE) || !WhiteStoneTexture.loadFromFile(WHITE_STONE) ||
         !BackgroundTexture.loadFromFile("Bkgrnd.png")) std::cout << "Textures not found\n";
     BlackStoneTexture.setSmooth(true);
@@ -147,11 +139,11 @@ void init_textures(sf::Texture & BlackStoneTexture, sf::Texture & WhiteStoneText
     WhiteStoneTexture.setRepeated(true);
 }
 
-void init_fonts(sf::Font & font) {
+void init_fonts() {
     if (!font.loadFromFile("arial.ttf")) std::cout << "Font not found\n";
 }
 
-void init_text(sf::Text & Player_1, sf::Text & Player_2, sf::Font & font) {
+void init_text() {
     Player_1.setFont(font);
     Player_2.setFont(font);
     Player_1.setString(PLAYER_1);
@@ -162,4 +154,44 @@ void init_text(sf::Text & Player_1, sf::Text & Player_2, sf::Font & font) {
     Player_2.setFillColor(sf::Color::Black);
     Player_1.setPosition(50, SCREEN_HEIGHT - 100);
     Player_2.setPosition(SCREEN_WIDTH - Player_2.getLocalBounds().width - 50, SCREEN_HEIGHT - 100);
+    
+    playerTurn.setFont(font);
+    playerTurn.setCharacterSize(50);
+    playerTurn.setString(PLAYER_1_TURN);
+    playerTurn.setStyle(sf::Text::Bold);
+    playerTurn.setFillColor(sf::Color::Black);
+    playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2, 100 - playerTurn.getLocalBounds().height / 2);
+    
+    passButton.setFont(font);
+    passButton.setCharacterSize(40);
+    passButton.setString(PASS_BUTTON);
+    passButton.setFillColor(sf::Color::Black);
+    passButton.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    passButton.setPosition(SCREEN_WIDTH - passButton.getLocalBounds().width - 65, 270);
+    
+    restartButton.setFont(font);
+    restartButton.setCharacterSize(40);
+    restartButton.setString(RESTART_BUTTON);
+    restartButton.setFillColor(sf::Color::Red);
+    restartButton.setPosition(SCREEN_WIDTH - restartButton.getLocalBounds().width - 25, 25);
+    
+    swap1Button.setFont(font);
+    swap2Button.setFont(font);
+    swap1Button.setCharacterSize(40);
+    swap2Button.setCharacterSize(40);
+    swap1Button.setString(SWAP1_BUTTON);
+    swap2Button.setString(SWAP2_BUTTON);
+    swap1Button.setFillColor(sf::Color::Red);
+    swap2Button.setFillColor(sf::Color::Red);
+    swap1Button.setPosition(50, 25);
+    swap2Button.setPosition(50, 100);
+}
+
+void init_sprites() {
+    background.setPosition(0, 200);
+    background.setTexture(BackgroundTexture);
+    blackStone.setTexture(BlackStoneTexture);
+    whiteStone.setTexture(WhiteStoneTexture);
+    blackStone.setPosition(Player_1.getLocalBounds().width + 70, SCREEN_HEIGHT - 95);
+    whiteStone.setPosition(SCREEN_WIDTH - Player_2.getLocalBounds().width - 110, SCREEN_HEIGHT - 95);
 }
