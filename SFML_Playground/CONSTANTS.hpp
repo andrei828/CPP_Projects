@@ -11,7 +11,8 @@
 
 #define ROW 0
 #define COLUMN 1
-#define DIAGONAL 2
+#define DIAGONAL1 2
+#define DIAGONAL2 3
 
 #define GAME_WIDTH_SEG 23
 #define GAME_HEIGHT_SEG 20

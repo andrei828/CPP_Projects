@@ -75,8 +75,7 @@ int main() {
                     // stone placed on board
                     if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y) {
                         game->place_stone(get_board_position(mousePos));
-                        if (game->is_game_won())
-                            std::cout << "Game won\n";
+                        if (game->is_game_won()) std::cout << "Game won\n";
                     }
                     break;
                 

@@ -12,10 +12,7 @@ class Game {
     char ** Board;
     std::vector<sf::Vector2i> WhiteStonePos;
     std::vector<sf::Vector2i> BlackStonePos;
-    /*
-     std::vector<std::pair< std::vector<sf::Vector2i>, bool> >> CompomentGraph;
-     unsigned int MaxComponentSize;
-    */
+    
 public:
     
     ~Game();
@@ -30,7 +27,6 @@ public:
     // -----------------
     // setter functions
     // -----------------
-    void start();
     void pass() { Turn = !Turn; }
     void place_stone(const sf::Vector2i & position);
     void set_game_type(bool GameType) { this->GameType = GameType; }
@@ -45,11 +41,6 @@ public:
     std::vector<sf::Vector2i> get_white_stone_pos() { return WhiteStonePos; }
     std::vector<sf::Vector2i> get_black_stone_pos() { return BlackStonePos; }
     
-    // ---------------
-    // debugging
-    // ---------------
-    void display_board();
-    void display_white_pos();
-    void display_black_pos();
+    
 };
 
