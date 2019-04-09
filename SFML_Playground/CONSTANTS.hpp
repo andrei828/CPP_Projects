@@ -48,3 +48,5 @@
 #define PLAYER_1_TURN "It's player 1's turn"
 #define PLAYER_2_TURN "It's player 2's turn"
 #define SWAP_RITUAL_1 "Player 1 places three stones on board"
+#define PLAYER_1_WON "Player 1 won"
+#define PLAYER_2_WON "Player 2 won"

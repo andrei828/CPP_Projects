@@ -29,7 +29,7 @@ void Game::place_stone(const sf::Vector2i & position) {
             Board[position.y][position.x] = 1;
             BlackStonePos.push_back(position);
         }
-        
+        StartRitual = false; // for debugging
         if (!StartRitual)
             Turn = !Turn;
         else {
@@ -99,15 +99,16 @@ bool Game::is_five(int x, int y, int direction) {
             break;
             
         case DIAGONAL2:
-            // stone before
-            if (y && x != GAME_WIDTH_SEG - 1 && Board[y - 1][x + 1] == Board[y][x]) return false;
             
+            // stone before
+            if (y && x < GAME_WIDTH_SEG - 1 && Board[y - 1][x + 1] == Board[y][x]) return false;
+            std::cout << "Pos: (" << x << ", " << y << ")\n";
             // stone in group
             for (index = 1; index < 5; index++)
                 if (Board[y + index][x - index] != Board[y][x]) return false;
             
             // stone after
-            if (x - index < 0 && y + index < GAME_HEIGHT_SEG &&
+            if (x - index >= 0 && y + index < GAME_HEIGHT_SEG &&
                 Board[y + index][x - index] == Board[y][x]) return false;
             break;
     }

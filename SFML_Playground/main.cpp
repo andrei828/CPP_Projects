@@ -7,6 +7,7 @@ void init_fonts();
 void init_sprites();
 void init_textures();
 
+bool END_GAME;
 sf::Font font;
 sf::Sprite background, whiteStone, blackStone, mouseStone;
 sf::Texture BlackStoneTexture, WhiteStoneTexture, BackgroundTexture;
@@ -70,12 +71,16 @@ int main() {
                     
                     // mouse clicked delete label
                     if (restartButton.getGlobalBounds().contains(mousePosF))
-                        game.reset(new Game());
+                    { game.reset(new Game()); END_GAME = false; }
                 
                     // stone placed on board
                     if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y) {
-                        game->place_stone(get_board_position(mousePos));
-                        if (game->is_game_won()) std::cout << "Game won\n";
+                        if (!END_GAME) game->place_stone(get_board_position(mousePos));
+                        if (game->is_game_won()) {
+                            if (game->get_turn()) { playerTurn.setString(PLAYER_1_WON), END_GAME = true; }
+                            else { playerTurn.setString(PLAYER_2_WON), END_GAME = false; }
+                            playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2, 100 - playerTurn.getLocalBounds().height / 2);
+                        }
                     }
                     break;
                 
@@ -88,8 +93,8 @@ int main() {
         
         // update game here
         set_game_type_gui(game->get_game_type());
-        playerTurn.setString(((game->get_turn())? PLAYER_2_TURN : PLAYER_1_TURN));
         mouseStone.setTexture((game->get_turn())? WhiteStoneTexture : BlackStoneTexture);
+        if (!END_GAME) playerTurn.setString(((game->get_turn())? PLAYER_2_TURN : PLAYER_1_TURN));
         mouseStone.setPosition(mousePosition.x - STONE_WIDTH / 2, mousePosition.y - STONE_HEIGHT / 2);
         window.clear(sf::Color(BLUE));
         
