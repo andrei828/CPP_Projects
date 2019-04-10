@@ -2,6 +2,7 @@
 
 Game::Game(bool Turn, bool GameType) {
     this->Turn = Turn;
+    this->Step2Ritual = false;
     this->GameType = GameType;
     this->PlayerColor = BLACK_FIRST;
     this->StartRitual = IS_START_RITUAL;
@@ -22,95 +23,117 @@ Game::~Game() {
 
 void Game::place_stone(const sf::Vector2i & position) {
     if (!Board[position.y][position.x]) {
-        if (Turn == BLACK) {
-            Board[position.y][position.x] = 2;
+        if ((Turn == PLAYER_1_TURN && PlayerColor == WHITE_FIRST) ||
+            (Turn == PLAYER_2_TURN && PlayerColor == BLACK_FIRST)) {
+            Board[position.y][position.x] = WHITE;
             WhiteStonePos.push_back(position);
         } else {
-            Board[position.y][position.x] = 1;
+            Board[position.y][position.x] = BLACK;
             BlackStonePos.push_back(position);
         }
-        StartRitual = false; // for debugging
-        if (!StartRitual)
-            Turn = !Turn;
+        
+        if (!StartRitual) Turn = !Turn;
         else {
-            if (GameType == SWAP_1) {
-                if (BlackStonePos.size() + WhiteStonePos.size() == 3) {
-                    
-                }
+            if (Step2Ritual && GameType == SWAP_1) {
+                Turn = !Turn;
+                
+                StartRitual = Step2Ritual = false;
             }
-            else if (GameType == SWAP_2) {
+            else if (Step2Ritual && GameType == SWAP_2) {
+                // part 2 for swap 2
                 
             }
+            else if (BlackStonePos.size() + WhiteStonePos.size() == 3)
+                Step2Ritual = true, Turn = !Turn;
+            else
+                PlayerColor = !PlayerColor;
         }
     }
 }
 
-bool Game::is_game_won() {
-    for (int y = 0; y < GAME_HEIGHT_SEG - 5; y++)
-        for (int x = 0; x < GAME_WIDTH_SEG - 5; x++)
-            if (Board[y][x] && (is_five(x, y, ROW) ||
-                                is_five(x, y, COLUMN) ||
-                                is_five(x, y, DIAGONAL1) ||
-                                is_five(GAME_WIDTH_SEG - x - 1, y, DIAGONAL2)))
+bool Game::is_game_won(int x, int y) {
+    if (is_five(x, y, ROW) ||
+        is_five(x, y, COLUMN) ||
+        is_five(x, y, DIAGONAL1) ||
+        is_five(x, y, DIAGONAL2))
                 return true;
     return false;
 }
 
-// TODO Update function to work on all cases
 bool Game::is_five(int x, int y, int direction) {
     
-    int index;
+    int index = 1;
+    int numStones = 1;
     switch (direction) {
         case ROW:
-            // stone before
-            if (x && Board[y][x - 1] == Board[y][x]) return false;
+            // search stones west
+            while (index < 5 && x - index >= 0 && Board[y][x - index++] == Board[y][x]) numStones++;
+            if (numStones == 5 && x - index >= 0 && Board[y][x - index] == Board[y][x]) return false;
             
-            // stone in group
-            for (index = 1; index < 5; index++)
-                if (Board[y][x + index] != Board[y][x]) return false;
+            index = 1;
             
-            // stone after
-            if (x + index < GAME_WIDTH_SEG && Board[y][x + index] == Board[y][x]) return false;
+            // search stones east
+            while (index < 5 && x + index < GAME_WIDTH_SEG && Board[y][x + index++] == Board[y][x]) numStones++;
+            if (numStones == 5 && x + index < GAME_WIDTH_SEG && Board[y][x + index] == Board[y][x]) return false;
+            
             break;
             
         case COLUMN:
-            // stone before
-            if (y && Board[y - 1][x] == Board[y][x]) return false;
+            // search stones north
+            while (index < 5 && y - index >= 0 && Board[y - index++][x] == Board[y][x]) numStones++;
+            if (numStones == 5 && y - index >= 0 && Board[y - index][x] == Board[y][x]) return false;
             
-            // stone in group
-            for (index = 1; index < 5; index++)
-                if (Board[y + index][x] != Board[y][x]) return false;
+            index = 1;
             
-            // stone after
-            if (y + index < GAME_HEIGHT_SEG && Board[y + index][x] == Board[y][x]) return false;
+            // search stones south
+            while (index < 5 && y + index < GAME_HEIGHT_SEG && Board[y + index++][x] == Board[y][x]) numStones++;
+            if (numStones == 5 && y - index < GAME_HEIGHT_SEG && Board[y + index][x] == Board[y][x]) return false;
+            
             break;
             
         case DIAGONAL1:
-            // stone before
-            if (x && y && Board[y - 1][x - 1] == Board[y][x]) return false;
+            // search stones north-west
+            while (index < 5 && x - index >= 0 && y - index >= 0 &&
+                   Board[y - index][x - index] == Board[y][x]) { numStones++, index++; }
+            if (numStones == 5 &&
+                x - index >= 0 &&
+                y - index >= 0 &&
+                Board[y - index][x - index] == Board[y][x]) return false;
             
-            // stone in group
-            for (index = 1; index < 5; index++)
-                if (Board[y + index][x + index] != Board[y][x]) return false;
-            
-            // stone after
-            if (y + index < GAME_HEIGHT_SEG && x + index < GAME_WIDTH_SEG &&
+            index = 1;
+        
+            // search stone south-east
+            while (index < 5 && x + index < GAME_WIDTH_SEG && y + index < GAME_HEIGHT_SEG &&
+                   Board[y + index][x + index] == Board[y][x]) { numStones++, index++; }
+            if (numStones == 5 &&
+                x + index < GAME_WIDTH_SEG &&
+                y + index < GAME_HEIGHT_SEG &&
                 Board[y + index][x + index] == Board[y][x]) return false;
             break;
             
         case DIAGONAL2:
+            // search stones north-east
+            while (index < 5 && x + index < GAME_WIDTH_SEG && y - index >= 0 &&
+                   Board[y - index][x + index] == Board[y][x]) { numStones++, index++; }
+            if (numStones == 5 &&
+                y - index >= 0 &&
+                x + index < GAME_WIDTH_SEG &&
+                Board[y - index][x + index] == Board[y][x]) return false;
             
-            // stone before
-            if (y && x < GAME_WIDTH_SEG - 1 && Board[y - 1][x + 1] == Board[y][x]) return false;
-            std::cout << "Pos: (" << x << ", " << y << ")\n";
-            // stone in group
-            for (index = 1; index < 5; index++)
-                if (Board[y + index][x - index] != Board[y][x]) return false;
+            index = 1;
             
-            // stone after
-            if (x - index >= 0 && y + index < GAME_HEIGHT_SEG &&
+            // search stones south-west
+            while (index < 5 && x - index >= 0 && y + index < GAME_HEIGHT_SEG &&
+                   Board[y + index][x - index] == Board[y][x]) { numStones++, index++; }
+            if (numStones == 5 &&
+                x - index >= 0 &&
+                y + index < GAME_HEIGHT_SEG &&
                 Board[y + index][x - index] == Board[y][x]) return false;
             break;
     }
-    return true;
+
+    // if there are only 5 stones found -> game is over
+    if (numStones == 5) return true;
+    
+    return false;
 }

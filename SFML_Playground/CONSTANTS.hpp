@@ -24,6 +24,11 @@
 #define WHITE_FIRST 1
 #define IS_START_RITUAL 1
 
+#define BLACK_TURN 0
+#define WHITE_TURN 1
+#define PLAYER_1_TURN 0
+#define PLAYER_2_TURN 1
+
 #define EMPTY 0
 #define BLACK 1
 #define WHITE 2
@@ -45,8 +50,9 @@
 #define RESTART_BUTTON "Restart"
 #define SWAP1_BUTTON "Swap mode"
 #define SWAP2_BUTTON "Swap 2 mode"
-#define PLAYER_1_TURN "It's player 1's turn"
-#define PLAYER_2_TURN "It's player 2's turn"
+#define PLAYER_1_TURN_STRING "It's player 1's turn"
+#define PLAYER_2_TURN_STRING "It's player 2's turn"
 #define SWAP_RITUAL_1 "Player 1 places three stones on board"
+#define SWAP_RITUAL_2 "Switch color"
 #define PLAYER_1_WON "Player 1 won"
 #define PLAYER_2_WON "Player 2 won"

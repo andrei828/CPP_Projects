@@ -1,11 +1,12 @@
-#include "Game.hpp"
 #include <cmath>
 #include <memory>
+#include "Game.hpp"
 
 void init_text();
 void init_fonts();
 void init_sprites();
 void init_textures();
+void switch_color_gui(std::unique_ptr<Game>& game);
 
 bool END_GAME;
 sf::Font font;
@@ -54,32 +55,43 @@ int main() {
                         std::cout << "Clicked button\n" << std::endl;
                     
                     // mouse clicked pass label
-                    if (passButton.getGlobalBounds().contains(mousePosF))
+                    else if (passButton.getGlobalBounds().contains(mousePosF))
                         game->pass();
                     
                     // mouse clicked draw label
-                    if (drawButton.getGlobalBounds().contains(mousePosF))
+                    else if (drawButton.getGlobalBounds().contains(mousePosF))
                         std::cout << "Draw button pressed\n";
                     
                     // mouse clicked swap 1 label
-                    if (swap1Button.getGlobalBounds().contains(mousePosF))
+                    else if (swap1Button.getGlobalBounds().contains(mousePosF))
                         game->set_game_type(SWAP_1);
                     
                     // mouse clicked swap 2 label
-                    if (swap2Button.getGlobalBounds().contains(mousePosF))
+                    else if (swap2Button.getGlobalBounds().contains(mousePosF))
                         game->set_game_type(SWAP_2);
                     
+                    // switch color label clicked
+                    else if (swapLabel.getGlobalBounds().contains(mousePosF) && game->get_step2_ritual())
+                    { game->switch_color(); switch_color_gui(game); }
+                    
                     // mouse clicked delete label
-                    if (restartButton.getGlobalBounds().contains(mousePosF))
-                    { game.reset(new Game()); END_GAME = false; }
+                    else if (restartButton.getGlobalBounds().contains(mousePosF))
+                    { game.reset(new Game()); END_GAME = false; init_text(); }
                 
                     // stone placed on board
-                    if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y) {
+                    else if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y) {
                         if (!END_GAME) game->place_stone(get_board_position(mousePos));
-                        if (game->is_game_won()) {
+                        if (game->get_start_ritual()) switch_color_gui(game);
+                        
+                        
+                        sf::Vector2i tmp = get_board_position(mousePos);
+                        if (game->is_game_won(tmp.x, tmp.y)) {
+                            
                             if (game->get_turn()) { playerTurn.setString(PLAYER_1_WON), END_GAME = true; }
-                            else { playerTurn.setString(PLAYER_2_WON), END_GAME = false; }
-                            playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2, 100 - playerTurn.getLocalBounds().height / 2);
+                            else { playerTurn.setString(PLAYER_2_WON), END_GAME = true; }
+                           
+                            playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2,
+                                                   100 - playerTurn.getLocalBounds().height / 2);
                         }
                     }
                     break;
@@ -93,9 +105,16 @@ int main() {
         
         // update game here
         set_game_type_gui(game->get_game_type());
-        mouseStone.setTexture((game->get_turn())? WhiteStoneTexture : BlackStoneTexture);
-        if (!END_GAME) playerTurn.setString(((game->get_turn())? PLAYER_2_TURN : PLAYER_1_TURN));
+        if (!END_GAME) playerTurn.setString(((game->get_turn())? PLAYER_2_TURN_STRING : PLAYER_1_TURN_STRING));
+
+        if ((game->get_turn() == PLAYER_1_TURN && game->get_player_color() == WHITE_FIRST) ||
+            (game->get_turn() == PLAYER_2_TURN && game->get_player_color() == BLACK_FIRST))
+            mouseStone.setTexture(WhiteStoneTexture);
+        else
+            mouseStone.setTexture(BlackStoneTexture);
+        
         mouseStone.setPosition(mousePosition.x - STONE_WIDTH / 2, mousePosition.y - STONE_HEIGHT / 2);
+        
         window.clear(sf::Color(BLUE));
         
         // draw objects here
@@ -105,7 +124,15 @@ int main() {
             place_piece(window, get_gui_position(_whiteStone), WhiteStoneTexture);
         for (auto& _blackStone: game->get_black_stone_pos())
             place_piece(window, get_gui_position(_blackStone), BlackStoneTexture);
-        if (game->get_start_ritual()) window.draw(swapLabel);
+        
+        if (game->get_start_ritual()) {
+            if (game->get_step2_ritual()) {
+                swapLabel.setString(SWAP_RITUAL_2);
+                swapLabel.setStyle(sf::Text::Underlined);
+                swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
+            }
+            window.draw(swapLabel);
+        }
         
         window.draw(Player_1);
         window.draw(Player_2);
@@ -176,7 +203,7 @@ void init_text() {
     
     playerTurn.setFont(font);
     playerTurn.setCharacterSize(50);
-    playerTurn.setString(PLAYER_1_TURN);
+    playerTurn.setString(PLAYER_1_TURN_STRING);
     playerTurn.setStyle(sf::Text::Bold);
     playerTurn.setFillColor(sf::Color::Black);
     playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2, 100 - playerTurn.getLocalBounds().height / 2);
@@ -226,4 +253,14 @@ void init_sprites() {
     whiteStone.setTexture(WhiteStoneTexture);
     blackStone.setPosition(Player_1.getLocalBounds().width + 70, SCREEN_HEIGHT - 95);
     whiteStone.setPosition(SCREEN_WIDTH - Player_2.getLocalBounds().width - 110, SCREEN_HEIGHT - 95);
+}
+
+void switch_color_gui(std::unique_ptr<Game>& game) {
+    if (game->get_player_color() == BLACK_FIRST) {
+        blackStone.setTexture(BlackStoneTexture);
+        whiteStone.setTexture(WhiteStoneTexture);
+    } else {
+        blackStone.setTexture(WhiteStoneTexture);
+        whiteStone.setTexture(BlackStoneTexture);
+    }
 }
