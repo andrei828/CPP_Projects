@@ -4,6 +4,27 @@ unsigned int AVL_Tree::get_depth() {
 	return ceil(log(num_of_nodes));
 }
 
+std::vector<int> AVL_Tree::get_level_order_data() {
+	std::queue<Node_AVL *> TreeQueue;
+	std::vector<int> result;
+	TreeQueue.push(root);
+
+	while (!TreeQueue.empty()) {
+		Node_AVL * tmp_node = TreeQueue.front();
+		
+		if (!tmp_node) { 
+			result.push_back(null); 
+			TreeQueue.pop(); 
+		} else {
+			result.push_back(tmp_node->data);
+			TreeQueue.pop();
+			TreeQueue.push(tmp_node->left);	
+			TreeQueue.push(tmp_node->right);
+		}
+	}
+	return result;
+}
+
 
 //---------------------------
 // 		adding methods

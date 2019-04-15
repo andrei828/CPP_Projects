@@ -1,0 +1,16 @@
+graph {
+    graph[ordering="out"];
+    Node0[shape="circle", label="3"];
+    Node1[shape="circle", label="2"];
+    Node2[shape="circle", label="5"];
+    Node3[shape="circle", label="1"];
+    NULL0[style="invis"];
+    Node4[shape="circle", label="4"];
+    Node5[shape="circle", label="9"];
+    Node0 -- Node1;
+    Node0 -- Node2;
+    Node1 -- Node3;
+    Node1 -- NULL0[style="invis"];
+    Node2 -- Node4;
+    Node2 -- Node5;
+}

@@ -1,5 +1,5 @@
 #include "Tree.hpp"
-#include "cmath"
+
 
 class AVL_Tree: public Tree {
     
@@ -10,6 +10,8 @@ public:
     unsigned int get_depth();
     AVL_Tree(Node_AVL * root) : root(root) {}
     AVL_Tree(int data) { root = new Node_AVL(data); }
+
+    friend std::istream& operator >> (std::istream& in, AVL_Tree *& tree);
 
     //---------------------------
 	// 	   displaying methods
@@ -26,6 +28,7 @@ public:
     Node_AVL * right_rotate(Node_AVL * root);
     unsigned int get_height(Node_AVL * root);
     int max(int a, int b) { return (a > b)? a : b; }
+    std::vector<int> get_level_order_data();
 
     //---------------------------
 	// 		adding methods
@@ -47,6 +50,33 @@ public:
 
 
 
+/*
+void printLevelOrder(Node *root) 
+{ 
+    // Base Case 
+    if (root == NULL)  return; 
+  
+    // Create an empty queue for level order tarversal 
+    queue<Node *> q; 
+  
+    // Enqueue Root and initialize height 
+    q.push(root); 
+  
+    while (q.empty() == false) 
+    { 
+        // Print front of queue and remove it from queue 
+        Node *node = q.front(); 
+        cout << node->data << " "; 
+        q.pop(); 
+  
+        
+        if (node->left != NULL) 
+            q.push(node->left); 
+  
+        if (node->right != NULL) 
+            q.push(node->right); 
+    } 
+} */
 
 
 

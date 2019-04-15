@@ -1,6 +1,9 @@
 #include <stack>
 #include <queue>
+#include <cmath>
+#include <vector>
 #include "Node.hpp"
+#include "binarytree.hpp"
 
 class Tree {
 
