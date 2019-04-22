@@ -12,7 +12,7 @@ bool END_GAME;
 sf::Font font;
 sf::Sprite background, whiteStone, blackStone, mouseStone;
 sf::Texture BlackStoneTexture, WhiteStoneTexture, BackgroundTexture;
-sf::Text Player_1, Player_2, playerTurn, passButton, restartButton, drawButton, swap1Button, swap2Button, swapLabel;
+sf::Text Player_1, Player_2, playerTurn, passButton, restartButton, drawButton, swap1Button, swap2Button, swapLabel, switchSwapLabel;
 
 void set_game_type_gui(bool GameType);
 sf::Vector2f get_gui_position(sf::Vector2i position);
@@ -52,7 +52,7 @@ int main() {
                 case sf::Event::MouseButtonPressed:
                     // mouse clicked turn label
                     if (playerTurn.getGlobalBounds().contains(mousePosF))
-                        std::cout << "Clicked button\n" << std::endl;
+                        continue;
                     
                     // mouse clicked pass label
                     else if (passButton.getGlobalBounds().contains(mousePosF))
@@ -60,7 +60,7 @@ int main() {
                     
                     // mouse clicked draw label
                     else if (drawButton.getGlobalBounds().contains(mousePosF))
-                        std::cout << "Draw button pressed\n";
+                        continue;
                     
                     // mouse clicked swap 1 label
                     else if (swap1Button.getGlobalBounds().contains(mousePosF))
@@ -73,6 +73,11 @@ int main() {
                     // switch color label clicked
                     else if (swapLabel.getGlobalBounds().contains(mousePosF) && game->get_step2_ritual())
                     { game->switch_color(); switch_color_gui(game); }
+                    
+                    // two more stones label clicked
+                    else if (switchSwapLabel.getGlobalBounds().contains(mousePosF) && game->get_step2_ritual() && game->get_game_type() == SWAP_2)
+                        std::cout << "Button presssssed\n";
+                        
                     
                     // mouse clicked delete label
                     else if (restartButton.getGlobalBounds().contains(mousePosF))
@@ -125,12 +130,29 @@ int main() {
         for (auto& _blackStone: game->get_black_stone_pos())
             place_piece(window, get_gui_position(_blackStone), BlackStoneTexture);
         
+        // TODO: Create a function for this code block
         if (game->get_start_ritual()) {
-            if (game->get_step2_ritual()) {
-                swapLabel.setString(SWAP_RITUAL_2);
-                swapLabel.setStyle(sf::Text::Underlined);
-                swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
+            
+            if (game->get_game_type() == SWAP_1) {
+                
+                if (game->get_step2_ritual()){
+                    swapLabel.setString(SWAP_RITUAL_2);
+                    swapLabel.setStyle(sf::Text::Underlined);
+                    swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
+                }
+                
             }
+            else if (game->get_game_type() == SWAP_2) {
+                
+                if (game->get_step2_ritual()) {
+                    swapLabel.setString(SWAP_RITUAL_2);
+                    swapLabel.setStyle(sf::Text::Underlined);
+                    swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2 - 200, 270);
+                    window.draw(switchSwapLabel);
+                }
+                
+            }
+            
             window.draw(swapLabel);
         }
         
@@ -244,6 +266,13 @@ void init_text() {
     swapLabel.setString(SWAP_RITUAL_1);
     swapLabel.setFillColor(sf::Color::White);
     swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
+    
+    switchSwapLabel.setFont(font);
+    switchSwapLabel.setCharacterSize(50);
+    switchSwapLabel.setString(SWAP_RITUAL_2_STONES);
+    switchSwapLabel.setFillColor(sf::Color::White);
+    switchSwapLabel.setStyle(sf::Text::Underlined);
+    switchSwapLabel.setPosition((SCREEN_WIDTH - switchSwapLabel.getLocalBounds().width) / 2 + 200, 270);
 }
 
 void init_sprites() {

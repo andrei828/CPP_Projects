@@ -54,5 +54,36 @@
 #define PLAYER_2_TURN_STRING "It's player 2's turn"
 #define SWAP_RITUAL_1 "Player 1 places three stones on board"
 #define SWAP_RITUAL_2 "Switch color"
+#define SWAP_RITUAL_2_STONES "Two more stones"
 #define PLAYER_1_WON "Player 1 won"
 #define PLAYER_2_WON "Player 2 won"
+
+/*
+
+if SWAP_1:
+
+    if (Step2Ritual)
+        Turn = !Turn
+        StartRitual = Step2Ritual = false
+    else if (BlackStonePos.size() + WhiteStonePos.size() == 3)
+        Turn = !Turn;
+        Step2Ritual = true;
+    else
+        PlayerColor = !PlayerColor
+ 
+ 
+if SWAP_2:
+
+    if (Step3Ritual && BlackStonePos.size() + WhiteStonePos.size() == 5)
+        Turn = !Turn;
+        StartRitual = Step3Ritual = false;
+    if (Step2Ritual)
+        Turn = !Turn
+        Step3Ritual = true
+        Step2Ritual = false
+    else if (BlackStonePos.size() + WhiteStonePos.size() == 3)
+        Turn = !Turn;
+        Step2Ritual = true
+    else
+        PlayerColor = !PlayerColor
+*/
