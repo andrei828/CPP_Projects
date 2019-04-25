@@ -5,9 +5,11 @@
 
 class Game {
     
+    bool OK;
     bool Turn;
     bool GameType;
     bool StartRitual;
+    bool Step1Ritual;
     bool Step2Ritual;
     bool Step3Ritual;
     bool Step4Ritual;
@@ -31,6 +33,7 @@ public:
     // setter functions
     // -----------------
     void pass() { Turn = !Turn; }
+    void start_OK() { OK = true; }
     void place_stone(const sf::Vector2i & position);
     void set_game_type(bool GameType) { this->GameType = GameType; }
     void switch_color() { PlayerColor = !PlayerColor; Turn = !Turn; }
@@ -38,8 +41,10 @@ public:
     // ----------------
     // getter functions
     // ----------------
+    bool get_OK() { return OK; }
     bool get_turn() { return Turn; }
     bool get_game_type() { return GameType; }
+    bool get_step1_ritual() { return Step1Ritual; }
     bool get_step2_ritual() { return Step2Ritual; }
     bool get_step3_ritual() { return Step3Ritual; }
     bool get_player_color() { return PlayerColor; }

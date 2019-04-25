@@ -2,6 +2,7 @@
 
 Game::Game(bool Turn, bool GameType) {
     this->Turn = Turn;
+    this->Step1Ritual = true;
     this->Step2Ritual = false;
     this->GameType = GameType;
     this->PlayerColor = BLACK_FIRST;
@@ -38,14 +39,19 @@ void Game::place_stone(const sf::Vector2i & position) {
                 Turn = !Turn;
                 StartRitual = Step2Ritual = false;
             }
-            else if (Step2Ritual && GameType == SWAP_2) {
+            else if (Step2Ritual && GameType == SWAP_2 && OK) {
                 PlayerColor = !PlayerColor;
                 Step3Ritual = true;
                 Step2Ritual = false;
             }
+            else if (Step2Ritual && GameType == SWAP_2 && !OK) {
+                Turn = !Turn;
+                StartRitual = false;
+            }
             else if (BlackStonePos.size() + WhiteStonePos.size() == 3) {
                 Turn = !Turn;
                 Step2Ritual = true;
+                Step1Ritual = false;
             }
             else if (Step3Ritual && BlackStonePos.size() + WhiteStonePos.size() == 5) {
                 StartRitual = Step3Ritual = false;

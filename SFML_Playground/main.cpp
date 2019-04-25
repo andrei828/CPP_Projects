@@ -76,9 +76,8 @@ int main() {
                     
                     // two more stones label clicked
                     else if (switchSwapLabel.getGlobalBounds().contains(mousePosF) && game->get_step2_ritual() && game->get_game_type() == SWAP_2)
-                        std::cout << "Button presssssed\n";
-                        
-                    
+                        game->start_OK();
+                
                     // mouse clicked delete label
                     else if (restartButton.getGlobalBounds().contains(mousePosF))
                     { game.reset(new Game()); END_GAME = false; init_text(); }
@@ -141,19 +140,25 @@ int main() {
                     swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
                 }
                 
+                window.draw(swapLabel);
             }
             else if (game->get_game_type() == SWAP_2) {
                 
-                if (game->get_step2_ritual()) {
+                if (!game->get_OK() && game->get_step2_ritual()) {
                     swapLabel.setString(SWAP_RITUAL_2);
                     swapLabel.setStyle(sf::Text::Underlined);
                     swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2 - 200, 270);
                     window.draw(switchSwapLabel);
+                    window.draw(swapLabel);
                 }
+                else if (game->get_step1_ritual())
+                    window.draw(swapLabel);
+                
+                
                 
             }
             
-            window.draw(swapLabel);
+            
         }
         
         window.draw(Player_1);
