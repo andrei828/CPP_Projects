@@ -7,6 +7,7 @@ class Game {
     
     bool OK;
     bool Turn;
+    bool isDraw;
     bool GameType;
     bool StartRitual;
     bool Step1Ritual;
@@ -14,7 +15,9 @@ class Game {
     bool Step3Ritual;
     bool Step4Ritual;
     bool PlayerColor;
+    
     char ** Board;
+    void check_ritual_logic();
     std::vector<sf::Vector2i> WhiteStonePos;
     std::vector<sf::Vector2i> BlackStonePos;
     
@@ -47,6 +50,7 @@ public:
     bool get_step1_ritual() { return Step1Ritual; }
     bool get_step2_ritual() { return Step2Ritual; }
     bool get_step3_ritual() { return Step3Ritual; }
+    bool get_step4_ritual() { return Step4Ritual; }
     bool get_player_color() { return PlayerColor; }
     bool get_start_ritual() { return StartRitual; }
     char get_stone(int x, int y) { return Board[y][x]; } // deprecated

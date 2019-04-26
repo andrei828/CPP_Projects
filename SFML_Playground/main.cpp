@@ -7,6 +7,7 @@ void init_fonts();
 void init_sprites();
 void init_textures();
 void switch_color_gui(std::unique_ptr<Game>& game);
+void start_ritual_logic(std::unique_ptr<Game>& game, sf::RenderWindow & window);
 
 bool END_GAME;
 sf::Font font;
@@ -17,6 +18,7 @@ sf::Text Player_1, Player_2, playerTurn, passButton, restartButton, drawButton, 
 void set_game_type_gui(bool GameType);
 sf::Vector2f get_gui_position(sf::Vector2i position);
 sf::Vector2i get_board_position(sf::Vector2i mousePos);
+void place_stone_gui(std::unique_ptr<Game>& game, sf::Vector2i& mousePos);
 void place_piece(sf::RenderWindow & window, sf::Vector2f position, sf::Texture & texture);
 
 int main() {
@@ -71,7 +73,7 @@ int main() {
                         game->set_game_type(SWAP_2);
                     
                     // switch color label clicked
-                    else if (swapLabel.getGlobalBounds().contains(mousePosF) && game->get_step2_ritual())
+                    else if (swapLabel.getGlobalBounds().contains(mousePosF) && (game->get_step2_ritual() || game->get_step4_ritual()))
                     { game->switch_color(); switch_color_gui(game); }
                     
                     // two more stones label clicked
@@ -83,21 +85,9 @@ int main() {
                     { game.reset(new Game()); END_GAME = false; init_text(); }
                 
                     // stone placed on board
-                    else if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y) {
-                        if (!END_GAME) game->place_stone(get_board_position(mousePos));
-                        if (game->get_start_ritual()) switch_color_gui(game);
-                        
-                        
-                        sf::Vector2i tmp = get_board_position(mousePos);
-                        if (game->is_game_won(tmp.x, tmp.y)) {
-                            
-                            if (game->get_turn()) { playerTurn.setString(PLAYER_1_WON), END_GAME = true; }
-                            else { playerTurn.setString(PLAYER_2_WON), END_GAME = true; }
-                           
-                            playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2,
-                                                   100 - playerTurn.getLocalBounds().height / 2);
-                        }
-                    }
+                    else if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y)
+                        place_stone_gui(game, mousePos);
+                    
                     break;
                 
                 case sf::Event::MouseMoved:
@@ -129,37 +119,7 @@ int main() {
         for (auto& _blackStone: game->get_black_stone_pos())
             place_piece(window, get_gui_position(_blackStone), BlackStoneTexture);
         
-        // TODO: Create a function for this code block
-        if (game->get_start_ritual()) {
-            
-            if (game->get_game_type() == SWAP_1) {
-                
-                if (game->get_step2_ritual()){
-                    swapLabel.setString(SWAP_RITUAL_2);
-                    swapLabel.setStyle(sf::Text::Underlined);
-                    swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
-                }
-                
-                window.draw(swapLabel);
-            }
-            else if (game->get_game_type() == SWAP_2) {
-                
-                if (!game->get_OK() && game->get_step2_ritual()) {
-                    swapLabel.setString(SWAP_RITUAL_2);
-                    swapLabel.setStyle(sf::Text::Underlined);
-                    swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2 - 200, 270);
-                    window.draw(switchSwapLabel);
-                    window.draw(swapLabel);
-                }
-                else if (game->get_step1_ritual())
-                    window.draw(swapLabel);
-                
-                
-                
-            }
-            
-            
-        }
+        start_ritual_logic(game, window);
         
         window.draw(Player_1);
         window.draw(Player_2);
@@ -173,6 +133,56 @@ int main() {
         window.draw(swap2Button);
         window.draw(restartButton);
         window.display();
+    }
+}
+
+void start_ritual_logic(std::unique_ptr<Game>& game, sf::RenderWindow & window) {
+    if (game->get_start_ritual()) {
+        
+        if (game->get_game_type() == SWAP_1) {
+            
+            if (game->get_step2_ritual()){
+                swapLabel.setString(SWAP_RITUAL_2);
+                swapLabel.setStyle(sf::Text::Underlined);
+                swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
+            }
+            
+            window.draw(swapLabel);
+        }
+        else if (game->get_game_type() == SWAP_2) {
+            
+            if (!game->get_OK() && game->get_step2_ritual()) {
+                swapLabel.setString(SWAP_RITUAL_2);
+                swapLabel.setStyle(sf::Text::Underlined);
+                swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2 - 200, 270);
+                window.draw(switchSwapLabel);
+                window.draw(swapLabel);
+            }
+            else if (game->get_step4_ritual()) {
+                swapLabel.setString(SWAP_RITUAL_2);
+                swapLabel.setStyle(sf::Text::Underlined);
+                swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
+                window.draw(swapLabel);
+            }
+            else if (game->get_step1_ritual())
+                window.draw(swapLabel);
+        }
+    }
+}
+
+void place_stone_gui(std::unique_ptr<Game>& game, sf::Vector2i& mousePos) {
+    if (!END_GAME) game->place_stone(get_board_position(mousePos));
+    if (game->get_start_ritual()) switch_color_gui(game);
+    
+    
+    sf::Vector2i tmp = get_board_position(mousePos);
+    if (game->is_game_won(tmp.x, tmp.y)) {
+        
+        if (game->get_turn()) { playerTurn.setString(PLAYER_1_WON), END_GAME = true; }
+        else { playerTurn.setString(PLAYER_2_WON), END_GAME = true; }
+        
+        playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2,
+                               100 - playerTurn.getLocalBounds().height / 2);
     }
 }
 

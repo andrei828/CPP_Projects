@@ -39,6 +39,7 @@
 #define BOARD_START_Y 365
 #define BOARD_WIDTH 1373
 #define BOARD_HEIGHT 1160
+#define NUM_OF_STONES 460
 
 #define BLUE 26, 255, 255, 255
 #define PLAYER_1 "Player 1"
@@ -50,40 +51,12 @@
 #define RESTART_BUTTON "Restart"
 #define SWAP1_BUTTON "Swap mode"
 #define SWAP2_BUTTON "Swap 2 mode"
+#define PLAYER_1_WON "Player 1 won"
+#define PLAYER_2_WON "Player 2 won"
+#define SWAP_RITUAL_2 "Switch color"
+#define SWAP_RITUAL_2_STONES "Two more stones"
 #define PLAYER_1_TURN_STRING "It's player 1's turn"
 #define PLAYER_2_TURN_STRING "It's player 2's turn"
 #define SWAP_RITUAL_1 "Player 1 places three stones on board"
-#define SWAP_RITUAL_2 "Switch color"
-#define SWAP_RITUAL_2_STONES "Two more stones"
-#define PLAYER_1_WON "Player 1 won"
-#define PLAYER_2_WON "Player 2 won"
 
-/*
 
-if SWAP_1:
-
-    if (Step2Ritual)
-        Turn = !Turn
-        StartRitual = Step2Ritual = false
-    else if (BlackStonePos.size() + WhiteStonePos.size() == 3)
-        Turn = !Turn;
-        Step2Ritual = true;
-    else
-        PlayerColor = !PlayerColor
- 
- 
-if SWAP_2:
-
-    if (Step3Ritual && BlackStonePos.size() + WhiteStonePos.size() == 5)
-        Turn = !Turn;
-        StartRitual = Step3Ritual = false;
-    if (Step2Ritual)
-        Turn = !Turn
-        Step3Ritual = true
-        Step2Ritual = false
-    else if (BlackStonePos.size() + WhiteStonePos.size() == 3)
-        Turn = !Turn;
-        Step2Ritual = true
-    else
-        PlayerColor = !PlayerColor
-*/

@@ -4,6 +4,8 @@ Game::Game(bool Turn, bool GameType) {
     this->Turn = Turn;
     this->Step1Ritual = true;
     this->Step2Ritual = false;
+    this->Step3Ritual = false;
+    this->Step4Ritual = false;
     this->GameType = GameType;
     this->PlayerColor = BLACK_FIRST;
     this->StartRitual = IS_START_RITUAL;
@@ -32,35 +34,43 @@ void Game::place_stone(const sf::Vector2i & position) {
             Board[position.y][position.x] = BLACK;
             BlackStonePos.push_back(position);
         }
-        
-        if (!StartRitual) Turn = !Turn;
-        else {
-            if (Step2Ritual && GameType == SWAP_1) {
-                Turn = !Turn;
-                StartRitual = Step2Ritual = false;
-            }
-            else if (Step2Ritual && GameType == SWAP_2 && OK) {
-                PlayerColor = !PlayerColor;
-                Step3Ritual = true;
-                Step2Ritual = false;
-            }
-            else if (Step2Ritual && GameType == SWAP_2 && !OK) {
-                Turn = !Turn;
-                StartRitual = false;
-            }
-            else if (BlackStonePos.size() + WhiteStonePos.size() == 3) {
-                Turn = !Turn;
-                Step2Ritual = true;
-                Step1Ritual = false;
-            }
-            else if (Step3Ritual && BlackStonePos.size() + WhiteStonePos.size() == 5) {
-                StartRitual = Step3Ritual = false;
-                Step4Ritual = true;
-                Turn = !Turn;
-            }
-            else
-                PlayerColor = !PlayerColor;
+        check_ritual_logic();
+        isDraw = (BlackStonePos.size() + WhiteStonePos.size() == NUM_OF_STONES)? true : false;
+    }
+}
+
+void Game::check_ritual_logic() {
+    if (!StartRitual) Turn = !Turn;
+    else {
+        if (Step2Ritual && GameType == SWAP_1) {
+            Turn = !Turn;
+            StartRitual = Step2Ritual = false;
         }
+        else if (Step2Ritual && GameType == SWAP_2 && OK) {
+            PlayerColor = !PlayerColor;
+            Step3Ritual = true;
+            Step2Ritual = false;
+        }
+        else if (Step2Ritual && GameType == SWAP_2 && !OK) {
+            Turn = !Turn;
+            StartRitual = false;
+        }
+        else if (Step4Ritual) {
+            Turn = !Turn;
+            StartRitual = false;
+        }
+        else if (BlackStonePos.size() + WhiteStonePos.size() == 3) {
+            Turn = !Turn;
+            Step2Ritual = true;
+            Step1Ritual = false;
+        }
+        else if (Step3Ritual && BlackStonePos.size() + WhiteStonePos.size() == 5) {
+            Step3Ritual = false;
+            Step4Ritual = true;
+            Turn = !Turn;
+        }
+        else
+            PlayerColor = !PlayerColor;
     }
 }
 
