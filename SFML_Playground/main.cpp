@@ -52,17 +52,14 @@ int main() {
                     break;
                 
                 case sf::Event::MouseButtonPressed:
-                    // mouse clicked turn label
-                    if (playerTurn.getGlobalBounds().contains(mousePosF))
-                        continue;
                     
                     // mouse clicked pass label
-                    else if (passButton.getGlobalBounds().contains(mousePosF))
+                    if (passButton.getGlobalBounds().contains(mousePosF))
                         game->pass();
                     
                     // mouse clicked draw label
-                    else if (drawButton.getGlobalBounds().contains(mousePosF))
-                        continue;
+                    else if (drawButton.getGlobalBounds().contains(mousePosF) && !END_GAME)
+                        game->propose_draw();
                     
                     // mouse clicked swap 1 label
                     else if (swap1Button.getGlobalBounds().contains(mousePosF))
@@ -74,15 +71,15 @@ int main() {
                     
                     // switch color label clicked
                     else if (swapLabel.getGlobalBounds().contains(mousePosF) && (game->get_step2_ritual() || game->get_step4_ritual()))
-                    { game->switch_color(); switch_color_gui(game); }
+                        game->switch_color(), switch_color_gui(game);
                     
                     // two more stones label clicked
                     else if (switchSwapLabel.getGlobalBounds().contains(mousePosF) && game->get_step2_ritual() && game->get_game_type() == SWAP_2)
                         game->start_OK();
                 
-                    // mouse clicked delete label
+                    // mouse clicked restart label
                     else if (restartButton.getGlobalBounds().contains(mousePosF))
-                    { game.reset(new Game()); END_GAME = false; init_text(); }
+                        game.reset(new Game()), END_GAME = false, init_text(); 
                 
                     // stone placed on board
                     else if (mousePos.x > BOARD_START_X && mousePos.x < BOARD_END_X && mousePos.y > BOARD_START_Y && mousePos.y < BOARD_END_Y)
@@ -99,7 +96,9 @@ int main() {
         
         // update game here
         set_game_type_gui(game->get_game_type());
-        if (!END_GAME) playerTurn.setString(((game->get_turn())? PLAYER_2_TURN_STRING : PLAYER_1_TURN_STRING));
+        if (!END_GAME) {
+            playerTurn.setString(((game->get_turn())? PLAYER_2_TURN_STRING : PLAYER_1_TURN_STRING));
+        }
 
         if ((game->get_turn() == PLAYER_1_TURN && game->get_player_color() == WHITE_FIRST) ||
             (game->get_turn() == PLAYER_2_TURN && game->get_player_color() == BLACK_FIRST))
@@ -137,11 +136,17 @@ int main() {
 }
 
 void start_ritual_logic(std::unique_ptr<Game>& game, sf::RenderWindow & window) {
+    if (game->get_draw()) {
+        playerTurn.setString(DRAW_LABEL);
+        playerTurn.setPosition((SCREEN_WIDTH - playerTurn.getLocalBounds().width) / 2, 100 - playerTurn.getLocalBounds().height / 2);
+        END_GAME = true;
+    }
+    
     if (game->get_start_ritual()) {
         
         if (game->get_game_type() == SWAP_1) {
             
-            if (game->get_step2_ritual()){
+            if (game->get_step2_ritual()) {
                 swapLabel.setString(SWAP_RITUAL_2);
                 swapLabel.setStyle(sf::Text::Underlined);
                 swapLabel.setPosition((SCREEN_WIDTH - swapLabel.getLocalBounds().width) / 2, 270);
