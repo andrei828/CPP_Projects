@@ -23,7 +23,8 @@ void place_piece(sf::RenderWindow & window, sf::Vector2f position, sf::Texture &
 
 int main() {
     // window render
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE);
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), SCREEN_TITLE,
+                            sf::Style::Titlebar | sf::Style::Close);
     
     // intitialise data
     init_fonts(); init_text(); init_textures(); init_sprites();
