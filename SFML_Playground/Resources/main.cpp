@@ -17,7 +17,7 @@ void start_ritual_logic(std::unique_ptr<Game>& game, sf::RenderWindow & window);
 
 bool END_GAME;
 sf::Font font;
-sf::Sprite background, whiteStone, blackStone, mouseStone;
+sf::Sprite background, whiteStone, blackStone, mouseStone, sprite;
 sf::Texture BlackStoneTexture, WhiteStoneTexture, BackgroundTexture;
 sf::Text Player_1, Player_2, playerTurn, passButton, restartButton, drawButton, swap1Button, swap2Button, swapLabel, switchSwapLabel;
 
@@ -219,7 +219,6 @@ sf::Vector2i get_board_position(sf::Vector2i mousePos) {
 }
 
 void place_piece(sf::RenderWindow & window, sf::Vector2f position, sf::Texture & texture) {
-    sf::Sprite sprite;
     sprite.setTexture(texture);
     sprite.setPosition(position.x, position.y);
     window.draw(sprite);
