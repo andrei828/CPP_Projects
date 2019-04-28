@@ -229,7 +229,7 @@ void init_textures() {
 }
 
 void init_fonts() {
-    if (!font.loadFromFile("arial.ttf")) std::cout << "Font not found\n";
+    if (!font.loadFromFile(GAME_FONT)) std::cout << "Font not found\n";
 }
 
 void init_text() {

@@ -1,10 +1,11 @@
 #define SCREEN_WIDTH 1500
 #define SCREEN_HEIGHT 1700
+#define GAME_FONT "Fonts & Images/arial.ttf"
 #define GAME_TITLE "Gomoku"
 #define SCREEN_TITLE "Gomoku"
-#define BACKGROUND "Bkgrnd.png"
-#define BLACK_STONE "Black_Stone.png"
-#define WHITE_STONE "White_Stone.png"
+#define BACKGROUND "Fonts & Images/Background.png"
+#define BLACK_STONE "Fonts & Images/Black_Stone.png"
+#define WHITE_STONE "Fonts & Images/White_Stone.png"
 
 #define STONE_WIDTH 50
 #define STONE_HEIGHT 50
