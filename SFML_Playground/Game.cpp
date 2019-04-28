@@ -2,6 +2,7 @@
 
 Game::Game(bool Turn, bool GameType) {
     this->Turn = Turn;
+    this->isDraw = false;
     this->Step1Ritual = true;
     this->Step2Ritual = false;
     this->Step3Ritual = false;
