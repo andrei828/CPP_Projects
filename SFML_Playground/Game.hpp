@@ -38,6 +38,7 @@ public:
     void pass() { Turn = !Turn; }
     void start_OK() { OK = true; }
     void place_stone(const sf::Vector2i & position);
+    void propose_draw() { isDraw = true; }
     void set_game_type(bool GameType) { this->GameType = GameType; }
     void switch_color() { PlayerColor = !PlayerColor; Turn = !Turn; }
     
@@ -46,6 +47,7 @@ public:
     // ----------------
     bool get_OK() { return OK; }
     bool get_turn() { return Turn; }
+    bool get_draw() { return isDraw; }
     bool get_game_type() { return GameType; }
     bool get_step1_ritual() { return Step1Ritual; }
     bool get_step2_ritual() { return Step2Ritual; }

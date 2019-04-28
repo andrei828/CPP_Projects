@@ -35,7 +35,8 @@ void Game::place_stone(const sf::Vector2i & position) {
             BlackStonePos.push_back(position);
         }
         check_ritual_logic();
-        isDraw = (BlackStonePos.size() + WhiteStonePos.size() == NUM_OF_STONES)? true : false;
+        if (BlackStonePos.size() + WhiteStonePos.size() == NUM_OF_STONES)
+            isDraw = true;
     }
 }
 

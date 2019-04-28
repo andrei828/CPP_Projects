@@ -50,6 +50,7 @@
 #define PASS_BUTTON "Pass"
 #define RESTART_BUTTON "Restart"
 #define SWAP1_BUTTON "Swap mode"
+#define DRAW_LABEL "It's a draw"
 #define SWAP2_BUTTON "Swap 2 mode"
 #define PLAYER_1_WON "Player 1 won"
 #define PLAYER_2_WON "Player 2 won"
