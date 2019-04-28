@@ -1,3 +1,9 @@
+/*
+ Ungureanu Andrei-Liviu
+ Grupa 131
+ Programare orientata pe obiecte
+ */
+
 #include <vector>
 #include <iostream>
 #include "CONSTANTS.hpp"

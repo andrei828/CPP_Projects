@@ -1,3 +1,9 @@
+/*
+ Ungureanu Andrei-Liviu
+ Grupa 131
+ Programare orientata pe obiecte
+*/
+
 #define SCREEN_WIDTH 1500
 #define SCREEN_HEIGHT 1700
 #define GAME_FONT "Resources/Fonts & Images/arial.ttf"
