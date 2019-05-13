@@ -9,19 +9,19 @@ class Movie;
 class Personnel {
 protected:
 	uint Id;
-	uint Salary;
+	double Salary;
 	std::string Name;
-	std::vector< std::pair< std::string, Movie > > MovieDevelopmentList;
+	std::vector< std::pair< std::string, Movie * > > MovieDevelopmentList;
 public:
-	virtual uint get_salary(const Movie&);
+	virtual double get_salary(Movie *);
 	
 	/* constructors */
-	Personnel(uint Id, std::string Name, uint Salary): 
+	Personnel(uint Id, std::string Name, double Salary): 
 	 Id(Id), Name(Name), Salary(Salary) {}
 
 };
 
-uint Personnel::get_salary(const Movie&) {
+double Personnel::get_salary(Movie *) {
 
 	return 15;
 }

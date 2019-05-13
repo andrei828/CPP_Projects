@@ -7,17 +7,17 @@
 class Actor: virtual public Personnel {
 protected:
 	bool MainRole;
-	uint PercentageBonus;
+	double PercentageBonus;
 
 public:
-	virtual uint get_salary(const Movie&);
+	virtual double get_salary(Movie *);
 
 	/* constructors */
-	Actor(uint Id, std::string Name, uint Salary, bool MainRole, uint PercentageBonus = 0):
+	Actor(uint Id, std::string Name, double Salary, bool MainRole = false, double PercentageBonus = 0):
 	 Personnel(Id, Name, Salary), MainRole(MainRole), PercentageBonus(PercentageBonus) {}
 };
 
-uint Actor::get_salary(const Movie&) {
+double Actor::get_salary(Movie *) {
 	return 5;
 }
 

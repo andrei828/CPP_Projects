@@ -6,17 +6,17 @@
 
 class Director: virtual public Personnel {
 protected:
-	uint Bonus;
+	double Bonus;
 
 public:
-	virtual uint get_salary(const Movie&);
+	virtual double get_salary(Movie *);
 
 	/* constructors */
-	Director(uint Id, std::string Name, uint Salary, uint Bonus):
+	Director(uint Id, std::string Name, double Salary, double Bonus):
 	 Personnel(Id, Name, Salary), Bonus(Bonus) {}
 };
 
-uint Director::get_salary(const Movie&) {
+double Director::get_salary(Movie *) {
 
 	return 10;
 }

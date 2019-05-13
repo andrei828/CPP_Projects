@@ -7,16 +7,16 @@
 
 class ActorDirector: public Actor, public Director {
 public:
-	uint get_salary(const Movie&);
+	double get_salary(Movie *);
 
 	/* constructors */
-	ActorDirector(uint Id, std::string Name, uint Salary, 
-				  uint PercentageBonus, uint MainRole, uint Bonus):
+	ActorDirector(uint Id, std::string Name, double Salary, 
+				  uint Bonus, uint MainRole = false, uint PercentageBonus = 0):
 	 Personnel(Id, Name, Salary), Actor(Id, Name, Salary,
 	 MainRole, PercentageBonus), Director(Id, Name, Salary, Bonus) {}
 };
 
-uint ActorDirector::get_salary(const Movie&) {
+double ActorDirector::get_salary(Movie *) {
 
 	return 20;
 }
