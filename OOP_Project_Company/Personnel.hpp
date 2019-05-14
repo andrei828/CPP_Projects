@@ -19,6 +19,9 @@ public:
 	Personnel(uint Id, std::string Name, double Salary): 
 	 Id(Id), Name(Name), Salary(Salary) {}
 
+	/* getters */
+	std::string get_name() { return Name; }
+
 };
 
 double Personnel::get_salary(Movie *) {

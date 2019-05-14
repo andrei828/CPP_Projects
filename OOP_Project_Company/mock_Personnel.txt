@@ -1,30 +1,31 @@
 4
-1
+100
 Tom Hanks
+4
 Actor
+1
 1
 Forrest Gump
-1
-10
-2
+101
 Robert Downey Jr.
+5
 Actor
+0
 1
 Avengers: Endgame
-5
-2
-3
+102
 Angelina Jolie
+4
 ActorDirector
+0
+10000
 1
 The Godfather
-5
-2
-10000
-4
+103
 Kevin Feige
+15
 Director
+50000
 1
 Avengers: Endgame
-15
-50000
+
