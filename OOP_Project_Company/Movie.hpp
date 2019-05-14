@@ -13,7 +13,7 @@ private:
 	std::vector<Personnel *> Employees;
 public:
 	/* getters */
-	uint get_profit() { return Profit; } /* in dollars */
+	uint get_profit() { return Profit; }     /* in dollars */
 	uint get_duration() { return Duration; } /* in minutes */
 	std::string get_name() { return Name; }
 	std::string get_category() { return Category; }

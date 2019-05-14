@@ -24,14 +24,46 @@ public:
 	void print_movies();
 	void input_personnel();
 	void print_personnel();
+
+	friend std::istream& operator >> (std::istream&  in, Manager * manager);
+	friend std::ostream& operator << (std::ostream& out, const Manager * manager);
 };
+
+std::istream& operator >> (std::istream& in, Manager * manager) {
+	std::ifstream fin(INPUT_MOVIES_FILE, std::ifstream::in);
+
+	std::string name, category;
+	uint year, duration, profit, number_of_movies;
+	fin >> number_of_movies; fin.ignore();
+
+	for (int i = 0; i < number_of_movies; i++) {
+		std::getline(fin, name);
+		fin >> year; fin.ignore();
+
+		std::getline(fin, category);
+		fin >> duration; fin.ignore();
+		fin >> profit; fin.ignore();
+
+		manager->productionCompany->add_movie(std::make_pair(year, 
+			(new Movie(name, category, duration, profit))));
+	}
+	return in;
+}
+
+std::ostream& operator << (std::ostream& out, const Manager * manager) {
+	std::vector< std::pair<uint, Movie *> > Movies = manager->productionCompany->get_movies();
+
+	for (auto movie: Movies) 
+		out << movie.first << std::endl;
+	
+	return out;
+}
 
 void Manager::print_movies() {
 	std::vector< std::pair< uint, Movie *> > Movies = productionCompany->get_movies();
 
-	for (auto movie: Movies) {
+	for (auto movie: Movies) 
 		std::cout << movie.first << std::endl;
-	}
 }
 
 void Manager::input_personnel() {

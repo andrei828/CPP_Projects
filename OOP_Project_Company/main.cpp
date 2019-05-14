@@ -6,8 +6,10 @@ int main() {
 	std::cout << x->get_salary(*tmp) << std::endl;
 	delete tmp;*/
 
-	Manager * manage = new Manager();
+	Manager * manager = new Manager();
 
-	manage->input_movies();
-	manage->print_movies();
+	operator>>(std::cin, manager);
+	operator<<(std::cout, manager);
+	// manage->input_movies();
+	//manage->print_movies();
 }
