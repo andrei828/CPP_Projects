@@ -12,13 +12,19 @@ public:
 	virtual double get_salary(Movie *);
 
 	/* constructors */
-	Director(uint Id, std::string Name, double Salary, double Bonus):
-	 Personnel(Id, Name, Salary), Bonus(Bonus) {}
+	Director(uint Id, std::string Name, double Salary,
+		std::vector< std::pair< std::string, Movie * > >& Movies, double Bonus):
+	 Personnel(Id, Name, Salary, Movies), Bonus(Bonus) {}
 };
 
 double Director::get_salary(Movie *) {
+	double sum = 0;
+	std::vector< std::pair< std::string, Movie * > >::iterator it;
 
-	return 10;
+	for (it = MovieDevelopmentList.begin(); it != MovieDevelopmentList.end(); ++it) 
+		sum += (it->second->get_profit() * Salary + Bonus); 
+
+	return sum;
 }
 
 #endif

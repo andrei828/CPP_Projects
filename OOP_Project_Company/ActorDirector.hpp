@@ -11,14 +11,21 @@ public:
 
 	/* constructors */
 	ActorDirector(uint Id, std::string Name, double Salary, 
+				  std::vector< std::pair< std::string, Movie * > >& Movies,
 				  uint Bonus, uint MainRole = false, uint PercentageBonus = 0):
-	 Personnel(Id, Name, Salary), Actor(Id, Name, Salary,
-	 MainRole, PercentageBonus), Director(Id, Name, Salary, Bonus) {}
+	 Personnel(Id, Name, Salary, Movies), Actor(Id, Name, Salary, Movies,
+	 MainRole, PercentageBonus), Director(Id, Name, Salary, Movies, Bonus) {}
 };
 
 double ActorDirector::get_salary(Movie *) {
 
-	return 20;
+	double sum = 0;
+	std::vector< std::pair< std::string, Movie * > >::iterator it;
+
+	for (it = MovieDevelopmentList.begin(); it != MovieDevelopmentList.end(); ++it) 
+		sum += (it->second->get_profit() * (Salary + 0.1) + Bonus); 
+
+	return sum;
 }
 
 #endif

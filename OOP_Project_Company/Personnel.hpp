@@ -2,7 +2,6 @@
 #define _INCL_PERSONNEL
 
 #include "Dependencies.hpp"
-#include "Movie.hpp"
 
 class Movie;
 
@@ -13,19 +12,26 @@ protected:
 	std::string Name;
 	std::vector< std::pair< std::string, Movie * > > MovieDevelopmentList;
 public:
-	virtual double get_salary(Movie *);
+	virtual double get_salary();
 	
 	/* constructors */
-	Personnel(uint Id, std::string Name, double Salary): 
-	 Id(Id), Name(Name), Salary(Salary) {}
+	Personnel(uint Id, std::string Name, double Salary, 
+		std::vector< std::pair< std::string, Movie * > >& Movies): 
+	 Id(Id), Name(Name), Salary(Salary), MovieDevelopmentList(Movies) {}
 
 	/* getters */
 	std::string get_name() { return Name; }
-
 };
 
-double Personnel::get_salary(Movie *) {
+double Personnel::get_salary() {
 
-	return 15;
+	double sum = 0;
+	std::vector< std::pair< std::string, Movie * > >::iterator it;
+
+	for (it = MovieDevelopmentList.begin(); it != MovieDevelopmentList.end(); ++it) 
+		sum += (it->second->get_profit() * Salary); 
+
+	return sum;
 }
+
 #endif

@@ -14,5 +14,5 @@ int main() {
 	manager->input_personnel();
 	
 	manager->print_movies();
-	manager->print_personnel();
+	//manager->print_personnel();
 }

@@ -63,8 +63,9 @@ std::ostream& operator << (std::ostream& out, const Manager * manager) {
 void Manager::print_movies() {
 	std::vector< std::pair< uint, Movie *> > Movies = productionCompany->get_movies();
 
+	int k = 1;
 	for (auto movie: Movies) 
-		std::cout << movie.first << std::endl;
+		std::cout << k++ << ") " << movie.second->get_name() << std::endl;
 }
 
 void Manager::print_personnel() {
@@ -106,30 +107,43 @@ void Manager::input_personnel() {
 		fin >> number_of_movies; fin.ignore();
 
 		for (int j = 0; j < number_of_movies; j++) {
-			fin >> movie_name; fin.ignore();
+			std::getline(fin, movie_name);
 
 			for (movie_it = Movies.begin(); movie_it != Movies.end(); ++movie_it)
-				if (!movie_it->second->get_name().compare(movie_name))
+				if (!movie_it->second->get_name().compare(movie_name)) 
 					movie_development_list.push_back(std::make_pair(
 						movie_it->second->get_name(), movie_it->second));
 		}
 
-		std::cout << id<<'\n'<<name<<'\n'<<salary<<'\n'<<role<<'\n'<<main_role<<'\n'<<number_of_movies<<'\n';
-		for (auto x: movie_development_list)
-			std::cout << x.second->get_name() << std::endl;
+		Personnel * _personnel;
+		if (_actor && _director) { 
+			_personnel = new ActorDirector(id, name, salary, movie_development_list,
+				bonus, main_role, percentage_bonus);
 
-		if (_actor && _director) 
-			productionCompany->add_personnel((new ActorDirector(
-				id, name, salary, bonus, main_role, percentage_bonus)));
-		else if (_actor) 
-			productionCompany->add_personnel((new Actor(
-				id, name, salary, main_role, percentage_bonus)));
-		else if (_director)
-			productionCompany->add_personnel((new Director(
-				id, name, salary, bonus)));
-		else 
-			productionCompany->add_personnel((new Personnel(
-				id, name, salary)));
+			productionCompany->add_personnel(_personnel);
+		}
+		else if (_actor) {
+			_personnel = new Actor(id, name, salary, movie_development_list, 
+				main_role, percentage_bonus);
+
+			productionCompany->add_personnel(_personnel);
+		}
+		else if (_director){
+			_personnel = new Director(id, name, salary, 
+				movie_development_list, bonus);
+
+			productionCompany->add_personnel(_personnel);
+		}
+		
+		else {
+			_personnel = new Personnel(id, name, salary, 
+				movie_development_list);
+
+			productionCompany->add_personnel(_personnel);
+		}
+
+		for (auto movie: movie_development_list)
+			movie.second->add_employee(_personnel);
 	}
 }
 
