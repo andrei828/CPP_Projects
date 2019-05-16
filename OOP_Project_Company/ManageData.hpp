@@ -21,10 +21,15 @@ public:
 		productionCompany = new ProductionCompany();
 	}
 
+
+
 	void input_movies();
 	void print_movies();
 	void input_personnel();
 	void print_personnel();
+
+	uint get_number_of_movies() { return (uint) productionCompany->get_movies().size(); }
+	Movie *& get_movie_at_index(uint index) { return productionCompany->get_movies()[index].second; }
 
 	friend std::istream& operator >> (std::istream&  in, Manager * manager);
 	friend std::ostream& operator << (std::ostream& out, const Manager * manager);
