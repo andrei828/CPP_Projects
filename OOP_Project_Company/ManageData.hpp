@@ -21,8 +21,6 @@ public:
 		productionCompany = new ProductionCompany<unsigned>();
 	}
 
-
-
 	void input_movies();
 	void print_movies();
 	void input_personnel();
