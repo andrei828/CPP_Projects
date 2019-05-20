@@ -21,6 +21,9 @@ public:
 
 	/* getters */
 	std::string get_name() { return Name; }
+	std::vector< std::pair< std::string, Movie * > > get_movies() 
+	{ return MovieDevelopmentList; }
+	Movie * get_movie_at_index(int index) { return MovieDevelopmentList[index].second; }
 };
 
 double Personnel::get_salary() {

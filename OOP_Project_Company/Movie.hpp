@@ -16,9 +16,9 @@ public:
 	/* getters */
 	uint get_profit() { return Profit; }     /* in dollars */
 	uint get_duration() { return Duration; } /* in minutes */
-	std::string get_name() { return Name; }
+	std::string get_name() const { return Name; }
 	std::string get_category() { return Category; }
-	std::vector<Personnel *> get_employees() { return Employees; }
+	std::vector<Personnel *>& get_employees() { return Employees; }
 
 	/* setters */ 
 	void set_name(std::string Name) { this->Name = Name; }

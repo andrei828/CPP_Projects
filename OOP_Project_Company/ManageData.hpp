@@ -14,11 +14,11 @@
 
 class Manager {
 private:
-	ProductionCompany * productionCompany;
+	ProductionCompany<unsigned> * productionCompany;
 
 public:
 	Manager() {
-		productionCompany = new ProductionCompany();
+		productionCompany = new ProductionCompany<unsigned>();
 	}
 
 
@@ -30,6 +30,7 @@ public:
 
 	uint get_number_of_movies() { return (uint) productionCompany->get_movies().size(); }
 	Movie *& get_movie_at_index(uint index) { return productionCompany->get_movies()[index].second; }
+	std::vector<Personnel *>& get_employees() { return productionCompany->get_personnel(); }
 
 	friend std::istream& operator >> (std::istream&  in, Manager * manager);
 	friend std::ostream& operator << (std::ostream& out, const Manager * manager);
